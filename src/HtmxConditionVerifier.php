@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\htmx_plus;
 
-use Drupal\Core\Path\PathMatcher;
+use Drupal\Core\Path\PathMatcherInterface;
 
 /**
  * Checks conditions to determine if the HTMX library should be added.
@@ -19,11 +19,11 @@ class HtmxConditionVerifier {
   /**
    * The current route match.
    *
-   * @var \Drupal\Core\Path\PathMatcher
+   * @var \Drupal\Core\Path\PathMatcherInterface
    */
   protected $pathMatcher;
 
-  public function __construct(PathMatcher $pathMatcher) {
+  public function __construct(PathMatcherInterface $pathMatcher) {
     $this->pathMatcher = $pathMatcher;
   }
 
