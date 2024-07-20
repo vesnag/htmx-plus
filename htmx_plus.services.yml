@@ -1,0 +1,8 @@
+services:
+  htmx_plus.library_manager:
+    class: Drupal\htmx_plus\HtmxLibraryManager
+    arguments: ['@library.discovery', '@htmx_plus.library_condition_checker', '@logger.factory']
+
+  htmx_plus.library_condition_checker:
+    class: Drupal\htmx_plus\HtmxLibraryConditionChecker
+    arguments: ['@path.matcher']

@@ -1,0 +1,7 @@
+name: HTMX Plus
+type: module
+description: 'Provides additional features and enhancements for the HTMX module.'
+package: Custom
+core_version_requirement: "^10 || ^11"
+dependencies:
+  - htmx:htmx

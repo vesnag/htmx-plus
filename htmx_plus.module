@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for htmx_plus module.
+ */
+
+/**
+ * Implements hook_page_attachments().
+ */
+function htmx_plus_page_attachments(array &$attachments) {
+  /** @var \Drupal\htmx_plus\HtmxLibraryManager library_manager **/
+  $library_manager = \Drupal::service('htmx_plus.library_manager');
+  $library_manager->attachHtmxLibraryIfExists($attachments);
+}
