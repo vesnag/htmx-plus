@@ -7,13 +7,28 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class HtmxLibraryManager.
+ * Class HtmxLibraryAttacher.
  *
- * Manages the htmx library for Drupal.
+ * Attaches the HTMX library to the given attachments array if it exists
+ * and conditions are met.
  *
  * @package Drupal\htmx_plus
  */
-class HtmxLibraryManager {
+class HtmxLibraryAttacher {
+
+  /**
+   * The name of the HTMX module.
+   *
+   * @var string
+   */
+  private const HTMX_MODULE_NAME = 'htmx';
+
+  /**
+   * The name of the HTMX library.
+   *
+   * @var string
+   */
+  private const HTMX_LIBRARY_NAME = 'drupal';
 
   /**
    * The logger service.
@@ -25,11 +40,11 @@ class HtmxLibraryManager {
 
   public function __construct(
     private LibraryDiscoveryInterface $libraryDiscovery,
-    private HtmxLibraryConditionChecker $htmxLibraryConditionChecker,
+    private HtmxConditionVerifier $htmxConditionVerifier,
     private LoggerChannelFactoryInterface $loggerFactory,
   ) {
     $this->libraryDiscovery = $libraryDiscovery;
-    $this->htmxLibraryConditionChecker = $htmxLibraryConditionChecker;
+    $this->htmxConditionVerifier = $htmxConditionVerifier;
     $this->logger = $this->loggerFactory->get('htmx_plus');
   }
 
@@ -39,16 +54,16 @@ class HtmxLibraryManager {
    * @param array<string,array<string,array<int,string>>> $attachments
    *   The attachments array.
    */
-  public function attachHtmxLibraryIfExists(array &$attachments): void {
+  public function attachLibraryIfAvailable(array &$attachments): void {
     if (FALSE === $this->doesXtmxLibraryExist()) {
       return;
     }
 
-    if (FALSE === $this->htmxLibraryConditionChecker->shouldAddHtmxLibrary()) {
+    if (FALSE === $this->htmxConditionVerifier->shouldAttachHtmxLibrary()) {
       return;
     }
 
-    $attachments['#attached']['library'][] = 'htmx/drupal';
+    $attachments['#attached']['library'][] = sprintf('%s/%s', self::HTMX_MODULE_NAME, self::HTMX_LIBRARY_NAME);
   }
 
   /**
@@ -58,12 +73,10 @@ class HtmxLibraryManager {
    *   TRUE if the library exists, FALSE otherwise.
    */
   protected function doesXtmxLibraryExist(): bool {
-    $module_name = 'htmx';
-    $library_name = 'drupal';
-    $library_definition = $this->libraryDiscovery->getLibraryByName('htmx', 'drupal');
+    $library_definition = $this->libraryDiscovery->getLibraryByName(self::HTMX_MODULE_NAME, self::HTMX_LIBRARY_NAME);
     if (FALSE === $library_definition) {
       $this->logger->warning('Library @module/@library does not exist.',
-      ['@module' => $module_name, '@library' => $library_name]);
+      ['@module' => self::HTMX_MODULE_NAME, '@library' => self::HTMX_LIBRARY_NAME]);
       return FALSE;
     }
 

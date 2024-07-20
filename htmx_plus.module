@@ -7,9 +7,13 @@
 
 /**
  * Implements hook_page_attachments().
+ *
+ * @param array<string,array<string,array<int,string>>> &$attachments
+ *   The attachments array.
  */
-function htmx_plus_page_attachments(array &$attachments) {
-  /** @var \Drupal\htmx_plus\HtmxLibraryManager library_manager **/
-  $library_manager = \Drupal::service('htmx_plus.library_manager');
-  $library_manager->attachHtmxLibraryIfExists($attachments);
+function htmx_plus_page_attachments(array &$attachments): void {
+
+  /** @var \Drupal\htmx_plus\HtmxLibraryAttacher $htmxLibraryAttacher **/
+  $htmxLibraryAttacher = \Drupal::service('htmx_plus.htmx_library_attacher');
+  $htmxLibraryAttacher->attachLibraryIfAvailable($attachments);
 }

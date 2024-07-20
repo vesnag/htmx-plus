@@ -14,7 +14,7 @@ use Drupal\Core\Path\PathMatcher;
  *
  * @package Drupal\htmx_plus
  */
-class HtmxLibraryConditionChecker {
+class HtmxConditionVerifier {
 
   /**
    * The current route match.
@@ -28,12 +28,12 @@ class HtmxLibraryConditionChecker {
   }
 
   /**
-   * Determines if the library should be added.
+   * Determines if the HTMX library should be attached based on spec conditions.
    *
    * @return bool
-   *   TRUE if the library should be added, otherwise FALSE.
+   *   True if the HTMX library should be attached, false otherwise.
    */
-  public function shouldAddHtmxLibrary() {
+  public function shouldAttachHtmxLibrary() {
     if ($this->pathMatcher->isFrontPage()) {
       return TRUE;
     }

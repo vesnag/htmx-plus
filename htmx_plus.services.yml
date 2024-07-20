@@ -1,8 +1,8 @@
 services:
-  htmx_plus.library_manager:
-    class: Drupal\htmx_plus\HtmxLibraryManager
-    arguments: ['@library.discovery', '@htmx_plus.library_condition_checker', '@logger.factory']
+  htmx_plus.htmx_library_attacher:
+    class: Drupal\htmx_plus\HtmxLibraryAttacher
+    arguments: ['@library.discovery', '@htmx_plus.htmx_condition_verifier', '@logger.factory']
 
-  htmx_plus.library_condition_checker:
-    class: Drupal\htmx_plus\HtmxLibraryConditionChecker
+  htmx_plus.htmx_condition_verifier:
+    class: Drupal\htmx_plus\HtmxConditionVerifier
     arguments: ['@path.matcher']
