@@ -1,8 +1,0 @@
-htmx_plus.random_number:
-  path: '/get-random-number'
-  defaults:
-    _controller: '\Drupal\htmx_plus\Controller\RandomNumberController::randomNumber'
-    _title: 'Get Random Number'
-  methods: [GET]
-  requirements:
-    _permission: 'access content'

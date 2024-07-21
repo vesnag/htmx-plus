@@ -51,19 +51,21 @@ class HtmxLibraryAttacher {
   /**
    * Manages the htmx library for Drupal.
    *
-   * @param array<string,array<string,array<int,string>>> $attachments
-   *   The attachments array.
+   * @param array<string,array<string,array<int,string>>> $render_array
+   *   The render array.
+   * @param bool $force_attach
+   *   Whether to force attaching the library regardless of conditions.
    */
-  public function attachLibraryIfAvailable(array &$attachments): void {
+  public function attachLibraryIfAvailable(array &$render_array, bool $force_attach = FALSE): void {
     if (FALSE === $this->doesXtmxLibraryExist()) {
       return;
     }
 
-    if (FALSE === $this->htmxConditionVerifier->shouldAttachHtmxLibrary()) {
+    if (FALSE === $force_attach && FALSE === $this->htmxConditionVerifier->shouldAttachHtmxLibrary()) {
       return;
     }
 
-    $attachments['#attached']['library'][] = sprintf('%s/%s', self::HTMX_MODULE_NAME, self::HTMX_LIBRARY_NAME);
+    $render_array['#attached']['library'][] = sprintf('%s/%s', self::HTMX_MODULE_NAME, self::HTMX_LIBRARY_NAME);
   }
 
   /**
