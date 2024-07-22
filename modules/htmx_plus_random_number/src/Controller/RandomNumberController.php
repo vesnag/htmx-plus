@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\htmx_plus\Controller;
+namespace Drupal\htmx_plus_random_number\Controller;
 
 use Drupal\Core\Block\BlockManagerInterface;
 use Drupal\Core\Controller\ControllerBase;
@@ -33,8 +33,9 @@ class RandomNumberController extends ControllerBase {
    */
   public function randomNumberBlock(): array {
 
-    /** @var \Drupal\htmx_plus\Plugin\Block\RandomNumberBlock $random_number_block **/
+    /** @var \Drupal\htmx_plus_random_number\Plugin\Block\RandomNumberBlock $random_number_block **/
     $random_number_block = $this->blockManager->createInstance('random_number_block', []);
+
     $render = $random_number_block->build();
 
     return $render;
@@ -48,7 +49,7 @@ class RandomNumberController extends ControllerBase {
    */
   public function randomNumberResult(): Response {
     $random_number = rand(1, 100);
-    $html_content = '<div>' . $random_number . '</div>';
+    $html_content = sprintf('<div>%s</div>', $random_number);
 
     $build = [
       '#type' => 'markup',

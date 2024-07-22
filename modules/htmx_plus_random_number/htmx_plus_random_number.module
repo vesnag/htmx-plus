@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for htmx_plus_random_number module.
+ */
+
+/**
+ * Implements hook_theme().
+ *
+ * @return array<string, array<string, array<string, null>|string>>.
+ *   An associative array of theme hooks and their definitions.
+ */
+function htmx_plus_random_number_theme(): array {
+  return [
+    'htmx_plus_random_number_build_random_number' => [
+      'variables' => [
+        'button_text' => NULL,
+      ],
+      'template' => 'htmx-plus-random-number-build-random-number',
+    ],
+  ];
+}

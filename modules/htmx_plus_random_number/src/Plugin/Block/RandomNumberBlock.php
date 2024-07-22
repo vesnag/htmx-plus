@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\htmx_plus\Plugin\Block;
+namespace Drupal\htmx_plus_random_number\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @Block(
  *   id = "random_number_block",
  *   admin_label = @Translation("Random Number Block"),
- *   category = @Translation("HTMX Plus"),
+ *   category = @Translation("HTMX Plus Random Number"),
  * )
  */
 class RandomNumberBlock extends BlockBase implements ContainerFactoryPluginInterface {
@@ -74,7 +74,7 @@ class RandomNumberBlock extends BlockBase implements ContainerFactoryPluginInter
    */
   public function build(): array {
     $build = [
-      '#theme' => 'htmx_plus_build_random_number',
+      '#theme' => 'htmx_plus_random_number_build_random_number',
       '#button_text' => $this->t('Get Random Number'),
     ];
 

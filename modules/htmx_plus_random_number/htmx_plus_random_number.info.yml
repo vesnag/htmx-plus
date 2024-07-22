@@ -1,0 +1,7 @@
+name: HTMX Plus Random number
+type: module
+description: 'Provides a random number generator for the HTMX Plus module.'
+package: Custom
+core_version_requirement: "^10 || ^11"
+dependencies:
+  - htmx_plus:htmx_plus
