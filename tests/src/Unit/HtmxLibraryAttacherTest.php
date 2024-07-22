@@ -9,6 +9,8 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\htmx_plus\HtmxConditionVerifier;
 use Drupal\htmx_plus\HtmxLibraryAttacher;
 use Drupal\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -90,9 +92,9 @@ class HtmxLibraryAttacherTest extends UnitTestCase {
    *   Whether the library should be attached.
    * @param array<string,array<string,array<int,string>>> $expectedRenderArray
    *   The expected render array after attaching the library.
-   *
-   * @dataProvider attachLibraryIfAvailableDataProvider
    */
+  #[Test]
+  #[DataProvider('attachLibraryIfAvailableDataProvider')]
   public function testAttachLibraryIfAvailable(array $renderArray, bool $forceAttach, bool $doesLibraryExist, bool $shouldAttachLibrary, array $expectedRenderArray): void {
     $this->libraryDiscovery->expects($this->any())
       ->method('getLibraryByName')
@@ -113,7 +115,7 @@ class HtmxLibraryAttacherTest extends UnitTestCase {
    * @return array<int,array<mixed>>
    *   An array of test data.
    */
-  public function attachLibraryIfAvailableDataProvider(): array {
+  public static function attachLibraryIfAvailableDataProvider(): array {
     return [
       [
         ['#attached' => ['library' => []]],

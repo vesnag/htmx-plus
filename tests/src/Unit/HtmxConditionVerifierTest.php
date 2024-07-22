@@ -7,6 +7,8 @@ namespace Drupal\Tests\htmx_plus\Unit;
 use Drupal\Core\Path\PathMatcherInterface;
 use Drupal\htmx_plus\HtmxConditionVerifier;
 use Drupal\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -44,9 +46,9 @@ class HtmxConditionVerifierTest extends UnitTestCase {
 
   /**
    * Tests the shouldAttachHtmxLibrary method.
-   *
-   * @dataProvider shouldAttachHtmxLibraryDataProvider
    */
+  #[Test]
+  #[DataProvider('shouldAttachHtmxLibraryDataProvider')]
   public function testShouldAttachHtmxLibrary(bool $isFrontPage, bool $expectedResult): void {
     $this->pathMatcher->expects($this->once())
       ->method('isFrontPage')
@@ -62,7 +64,7 @@ class HtmxConditionVerifierTest extends UnitTestCase {
    * @return array<int,array<int,bool>>
    *   An array of test data.
    */
-  public function shouldAttachHtmxLibraryDataProvider(): array {
+  public static function shouldAttachHtmxLibraryDataProvider(): array {
     return [
       [TRUE, TRUE],
       [FALSE, FALSE],
