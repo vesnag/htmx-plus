@@ -7,6 +7,7 @@ namespace Drupal\Tests\htmx_plus\Unit;
 use Drupal\Core\Path\PathMatcherInterface;
 use Drupal\htmx_plus\HtmxConditionVerifier;
 use Drupal\Tests\UnitTestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Tests the HtmxConditionVerifier class.
@@ -22,19 +23,19 @@ class HtmxConditionVerifierTest extends UnitTestCase {
    *
    * @var \Drupal\Core\Path\PathMatcherInterface|\PHPUnit\Framework\MockObject\MockObject
    */
-  protected $pathMatcher;
+  protected PathMatcherInterface|MockObject $pathMatcher;
 
   /**
    * The HtmxConditionVerifier instance.
    *
    * @var \Drupal\htmx_plus\HtmxConditionVerifier
    */
-  protected $htmxConditionVerifier;
+  protected HtmxConditionVerifier $htmxConditionVerifier;
 
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->pathMatcher = $this->createMock(PathMatcherInterface::class);
