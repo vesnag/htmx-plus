@@ -12,3 +12,5 @@ htmx_plus.get_random_number:
     _title: 'Get Random Number'
   requirements:
     _permission: 'access content'
+  options:
+    _htmx_route: true
