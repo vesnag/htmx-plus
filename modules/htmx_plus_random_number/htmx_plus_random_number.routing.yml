@@ -14,3 +14,4 @@ htmx_plus.get_random_number:
     _permission: 'access content'
   options:
     _htmx_route: true
+    no_cache: true
