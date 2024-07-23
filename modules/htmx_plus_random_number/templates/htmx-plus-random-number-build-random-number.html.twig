@@ -1,3 +1,8 @@
-<button hx-get="/get-random-number" hx-trigger="click" hx-target="#random-number-result" hx-swap="innerHTML">{{ button_text }}</button>
+<button {{ hx_attributes({
+  get: '/get-random-number',
+  trigger: 'click',
+  target: '#random-number-result',
+  swap: 'innerHTML'
+  }) }}>{{ button_text }}</button>
 
 <div id="random-number-result"></div>
