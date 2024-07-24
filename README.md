@@ -15,6 +15,9 @@ Includes a debug extension that can be enabled via the module's settings form. W
 Contains a small demo feature that generates a random number, showcasing the module's capabilities and providing a simple example of its usage.
 
 ---
+### TODO
+- Write a drush command to add debug on all elements.
 
 ### Note
 Some items are intentionally inconsistent because I am just playing around.
+
