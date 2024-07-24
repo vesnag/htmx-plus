@@ -7,6 +7,16 @@ services:
     class: Drupal\htmx_plus\HtmxConditionVerifier
     arguments: ['@path.matcher']
 
+  htmx_plus.config_service:
+    class: 'Drupal\htmx_plus\Service\ConfigService'
+    arguments: ['@config.factory']
+
+  htmx_plus.debug_library_subscriber:
+    class: Drupal\htmx_plus\EventSubscriber\HtmxDebugLibrarySubscriber
+    arguments: ['@htmx_plus.config_service']
+    tags:
+      - { name: event_subscriber }
+
   htmx_plus.html_extension:
     class: Drupal\htmx_plus\Twig\HTMXExtension
     tags:

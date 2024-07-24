@@ -1,0 +1,7 @@
+htmx_plus.admin_settings:
+  path: '/admin/config/development/htmx-plus'
+  defaults:
+    _form: '\Drupal\htmx_plus\Form\SettingsForm'
+    _title: 'HTMX Plus Settings'
+  requirements:
+    _permission: 'administer site configuration'

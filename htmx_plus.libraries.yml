@@ -1,0 +1,6 @@
+debug:
+  version: 2.0.0
+  js:
+    https://unpkg.com/htmx-ext-debug@2.0.0/debug.js: {}
+  dependencies:
+    - htmx/htmx
