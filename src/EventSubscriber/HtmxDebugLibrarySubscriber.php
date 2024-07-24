@@ -51,7 +51,7 @@ class HtmxDebugLibrarySubscriber implements EventSubscriberInterface {
     if (!isset($attachments['library'])) {
       $attachments['library'] = [];
     }
-    $attachments['library'][] = 'htmx_plus/debug';
+    $attachments['library'][] = 'htmx/debug';
 
     $response->setAttachments($attachments);
   }
