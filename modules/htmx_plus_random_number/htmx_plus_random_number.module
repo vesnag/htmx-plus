@@ -8,7 +8,7 @@
 /**
  * Implements hook_theme().
  *
- * @return array<string, array<string, array<string, null>|string>>.
+ * @phpstan-return array<string, array<string, array<string, null>|string>>.
  *   An associative array of theme hooks and their definitions.
  */
 function htmx_plus_random_number_theme(): array {

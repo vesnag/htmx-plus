@@ -8,7 +8,7 @@
 /**
  * Implements hook_page_attachments().
  *
- * @param array<string,array<string,array<int,string>>> &$attachments
+ * @phpstan-param array<string,array<string,array<int,string>>> &$attachments
  *   The attachments array.
  */
 function htmx_plus_page_attachments(array &$attachments): void {
