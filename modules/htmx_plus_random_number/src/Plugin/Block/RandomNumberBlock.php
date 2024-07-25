@@ -2,20 +2,21 @@
 
 namespace Drupal\htmx_plus_random_number\Plugin\Block;
 
+use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\htmx_plus\HtmxLibraryAttacher;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a 'Random Number' Block.
- *
- * @Block(
- *   id = "random_number_block",
- *   admin_label = @Translation("Random Number Block"),
- *   category = @Translation("HTMX Plus Random Number"),
- * )
  */
+#[Block(
+  id: "random_number_block",
+  admin_label: new TranslatableMarkup("Random Number Block"),
+  category: new TranslatableMarkup("HTMX Plus Random Number"),
+ )]
 class RandomNumberBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
