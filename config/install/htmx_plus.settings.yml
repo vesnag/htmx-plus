@@ -1,2 +1,1 @@
-htmx_plus.settings:
-  debug_enabled: false
+debug_enabled: false
