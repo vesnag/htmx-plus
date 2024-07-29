@@ -9,7 +9,11 @@ services:
 
   htmx_plus.config_service:
     class: 'Drupal\htmx_plus\Service\ConfigService'
-    arguments: ['@config.factory']
+    arguments: ['@config.factory', '@state']
+
+  htmx_plus.htmx_debug_checker:
+    class: 'Drupal\htmx_plus\Service\HtmxDebugChecker'
+    arguments: ['@htmx_plus.config_service']
 
   htmx_plus.debug_library_subscriber:
     class: Drupal\htmx_plus\EventSubscriber\HtmxDebugLibrarySubscriber
@@ -19,5 +23,6 @@ services:
 
   htmx_plus.html_extension:
     class: Drupal\htmx_plus\Twig\HTMXExtension
+    arguments: ['@htmx_plus.htmx_debug_checker']
     tags:
       - { name: twig.extension }

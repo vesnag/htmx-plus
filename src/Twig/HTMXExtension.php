@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\htmx_plus\Twig;
 
+use Drupal\htmx_plus\Service\HtmxDebugChecker;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -11,6 +12,8 @@ use Twig\TwigFunction;
  * HTMXExtension Twig extension.
  */
 class HTMXExtension extends AbstractExtension {
+
+  public function __construct(private HtmxDebugChecker $htmxDebugChecker) {}
 
   /**
    * Returns the HTMX attributes as HTML string.
@@ -31,15 +34,17 @@ class HTMXExtension extends AbstractExtension {
    *   An array of HTMX attributes.
    */
   public function hxAttributes(array $attributes = []): string {
-    $htmlAttributes = '';
+    $html_attributes = '';
+
+    $attributes = $this->htmxDebugChecker->toggleDebugAttribute($attributes);
 
     foreach ($attributes as $key => $value) {
       if (!empty($value)) {
-        $htmlAttributes .= sprintf(' hx-%s="%s"', htmlspecialchars($key), htmlspecialchars($value));
+        $html_attributes .= sprintf(' hx-%s="%s"', htmlspecialchars($key), htmlspecialchars($value));
       }
     }
 
-    return $htmlAttributes;
+    return $html_attributes;
   }
 
 }

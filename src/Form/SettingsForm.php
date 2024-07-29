@@ -2,13 +2,12 @@
 
 namespace Drupal\htmx_plus\Form;
 
-use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Defines the settings form for the HTMX Plus module.
  */
-class SettingsForm extends ConfigFormBase {
+class SettingsForm extends StateFormBase {
 
   /**
    * {@inheritdoc}
@@ -47,6 +46,12 @@ class SettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('debug_enabled'),
     ];
 
+    $form['debug_enabled_all'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable HTMX debug mode for all elements'),
+      '#default_value' => $this->state->get('htmx_plus.debug_enabled_all'),
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -62,6 +67,8 @@ class SettingsForm extends ConfigFormBase {
     $this->config('htmx_plus.settings')
       ->set('debug_enabled', $form_state->getValue('debug_enabled'))
       ->save();
+
+    $this->state->set('htmx_plus.debug_enabled_all', $form_state->getValue('debug_enabled_all'));
 
     parent::submitForm($form, $form_state);
   }
