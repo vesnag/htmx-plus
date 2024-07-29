@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\htmx_plus\EventSubscriber;
 
 use Drupal\Core\Render\AttachmentsInterface;

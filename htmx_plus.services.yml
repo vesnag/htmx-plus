@@ -26,3 +26,9 @@ services:
     arguments: ['@htmx_plus.htmx_debug_checker']
     tags:
       - { name: twig.extension }
+
+  htmx_plus.commands:
+    class: Drupal\htmx_plus\Commands\HtmxPlusCommands
+    arguments: ['@state']
+    tags:
+      - { name: drush.command }
