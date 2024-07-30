@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\htmx_plus\Form;
 
 use Drupal\Core\Form\FormStateInterface;
