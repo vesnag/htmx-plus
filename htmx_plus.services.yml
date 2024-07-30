@@ -28,7 +28,7 @@ services:
       - { name: twig.extension }
 
   htmx_plus.commands:
-    class: Drupal\htmx_plus\Commands\HtmxPlusCommands
+    class: Drupal\htmx_plus\Drush\Commands\HtmxPlusCommands
     arguments: ['@state']
     tags:
       - { name: drush.command }
