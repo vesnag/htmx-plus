@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
+use Drupal\htmx_plus\Checker\HtmxDebugChecker;
 use Drupal\htmx_plus\Service\ConfigService;
-use Drupal\htmx_plus\Service\HtmxDebugChecker;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -24,7 +24,7 @@ class HtmxPlusDebugCheckerTest extends TestCase {
   /**
    * The htmx debug checker.
    *
-   * @var \Drupal\htmx_plus\Service\HtmxDebugChecker
+   * @var \Drupal\htmx_plus\Checker\HtmxDebugChecker
    */
   private HtmxDebugChecker $htmxDebugChecker;
 
@@ -43,7 +43,7 @@ class HtmxPlusDebugCheckerTest extends TestCase {
     $this->configService->method('isDebugEnabled')->willReturn(FALSE);
 
     $attributes = ['ext' => 'debug'];
-    $result = $this->htmxDebugChecker->toggleDebugAttribute($attributes);
+    $result = $this->htmxDebugChecker->toggleAttribute($attributes);
 
     $this->assertArrayNotHasKey('ext', $result);
   }
@@ -56,7 +56,7 @@ class HtmxPlusDebugCheckerTest extends TestCase {
     $this->configService->method('isDebugAllEnabled')->willReturn(FALSE);
 
     $attributes = ['foo' => 'bar'];
-    $result = $this->htmxDebugChecker->toggleDebugAttribute($attributes);
+    $result = $this->htmxDebugChecker->toggleAttribute($attributes);
 
     $this->assertArrayNotHasKey('ext', $result);
   }
@@ -69,7 +69,7 @@ class HtmxPlusDebugCheckerTest extends TestCase {
     $this->configService->method('isDebugAllEnabled')->willReturn(TRUE);
 
     $attributes = ['foo' => 'bar'];
-    $result = $this->htmxDebugChecker->toggleDebugAttribute($attributes);
+    $result = $this->htmxDebugChecker->toggleAttribute($attributes);
 
     $this->assertArrayHasKey('ext', $result);
     $this->assertEquals('debug', $result['ext']);

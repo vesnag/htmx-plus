@@ -2,12 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Drupal\htmx_plus\Service;
+namespace Drupal\htmx_plus\Checker;
+
+use Drupal\htmx_plus\Service\ConfigService;
 
 /**
  * Service to check if debug is enabled.
  */
-final class HtmxDebugChecker {
+class HtmxDebugChecker implements AttributeChecker {
 
   public function __construct(
     private ConfigService $configService,
@@ -16,13 +18,13 @@ final class HtmxDebugChecker {
   /**
    * Add debug attribute if debug is enabled.
    *
-   * @param array<string,string> $attributes
+   * @param string[] $attributes
    *   An array of HTMX attributes.
    *
-   * @return array<string,string>
+   * @return string[]
    *   An array of HTMX attributes.
    */
-  public function toggleDebugAttribute(array $attributes): array {
+  public function toggleAttribute(array $attributes): array {
     if (FALSE === $this->configService->isDebugEnabled()) {
       if (isset($attributes['ext']) && $attributes['ext'] === 'debug') {
         unset($attributes['ext']);

@@ -21,14 +21,14 @@ services:
     tags:
       - { name: event_subscriber }
 
-  htmx_plus.html_extension:
-    class: Drupal\htmx_plus\Twig\HTMXExtension
-    arguments: ['@htmx_plus.htmx_debug_checker']
-    tags:
-      - { name: twig.extension }
-
   htmx_plus.commands:
     class: Drupal\htmx_plus\Drush\Commands\HtmxPlusCommands
     arguments: ['@state']
     tags:
       - { name: drush.command }
+
+  Drupal\htmx_plus\Context\AttributeCheckerContext:
+    arguments: []
+    calls:
+       - method: addChecker
+         arguments: ['@htmx_plus.htmx_debug_checker']
