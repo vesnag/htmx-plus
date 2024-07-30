@@ -18,6 +18,10 @@ aiding in development and debugging.
 Contains a small demo feature that generates a random number, showcasing the
 module's capabilities and providing a simple example of its usage.
 
+- **Drush Command:**
+Provides a Drush command `htmx:debug` to toggle debug mode on all HTMX elements.
+You can enable debug mode with `drush htmx:debug on` and disable it with `drush htmx:debug off`.
+
 ---
 
 ### Note
