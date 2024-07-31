@@ -4,6 +4,7 @@ namespace Drupal\htmx_plus_random_number\Plugin\Block;
 
 use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\htmx_plus\HtmxLibraryAttacher;
@@ -88,7 +89,7 @@ class RandomNumberBlock extends BlockBase implements ContainerFactoryPluginInter
    * {@inheritdoc}
    */
   public function getCacheMaxAge() {
-    return 0;
+    return Cache::PERMANENT;
   }
 
 }
