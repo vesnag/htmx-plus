@@ -12,7 +12,7 @@ services:
     arguments: ['@config.factory', '@state']
 
   htmx_plus.htmx_debug_checker:
-    class: 'Drupal\htmx_plus\Service\HtmxDebugChecker'
+    class: 'Drupal\htmx_plus\Checker\HtmxDebugChecker'
     arguments: ['@htmx_plus.config_service']
 
   htmx_plus.debug_library_subscriber:
@@ -27,8 +27,16 @@ services:
     tags:
       - { name: drush.command }
 
+  htmx_plus.html_extension:
+    class: Drupal\htmx_plus\Twig\HTMXExtension
+    arguments: ['@Drupal\htmx_plus\Context\AttributeCheckerContext']
+    tags:
+      - { name: twig.extension }
+
   Drupal\htmx_plus\Context\AttributeCheckerContext:
     arguments: []
     calls:
        - method: addChecker
          arguments: ['@htmx_plus.htmx_debug_checker']
+
+
