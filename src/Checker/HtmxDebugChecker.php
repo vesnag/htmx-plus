@@ -9,7 +9,7 @@ use Drupal\htmx_plus\Service\ConfigService;
 /**
  * Service to check if debug is enabled.
  */
-class HtmxDebugChecker implements AttributeChecker {
+class HtmxDebugChecker implements AttributeCheckerInterface {
 
   public function __construct(
     private ConfigService $configService,

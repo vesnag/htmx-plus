@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\htmx_plus\Context;
 
-use Drupal\htmx_plus\Checker\AttributeChecker;
+use Drupal\htmx_plus\Checker\AttributeCheckerInterface;
 
 /**
  * Context to apply attribute checkers.
@@ -14,14 +14,14 @@ class AttributeCheckerContext {
   /**
    * The checkers to apply.
    *
-   * @var \Drupal\htmx_plus\Checker\AttributeChecker[]
+   * @var \Drupal\htmx_plus\Checker\AttributeCheckerInterface[]
    */
   private array $checkers = [];
 
   /**
    * Add a checker to the context.
    */
-  public function addChecker(AttributeChecker $checker): void {
+  public function addChecker(AttributeCheckerInterface $checker): void {
     $this->checkers[] = $checker;
   }
 

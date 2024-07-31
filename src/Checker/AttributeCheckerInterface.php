@@ -7,7 +7,7 @@ namespace Drupal\htmx_plus\Checker;
 /**
  * Interface for attribute checkers.
  */
-interface AttributeChecker {
+interface AttributeCheckerInterface {
 
   /**
    * Add or remove attributes based on the checker logic.

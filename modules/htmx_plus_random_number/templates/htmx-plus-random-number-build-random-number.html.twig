@@ -4,6 +4,18 @@
   target: '#random-number-result',
   swap: 'innerHTML',
   ext: 'debug',
-  }) }}>{{ button_text }}</button>
+  }) }}>{{ button_text }} with HTMX</button>
 
 <div id="random-number-result"></div>
+
+
+<button onclick="fetch('/get-random-number').then(response => response.text()).then(data => updateUI(data))">
+ {{ button_text }} with JS Ajax request
+</button>
+<div id="response-container"></div>
+
+<script>
+function updateUI(data) {
+  document.getElementById('response-container').innerHTML = data;
+}
+</script>
