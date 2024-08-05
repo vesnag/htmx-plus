@@ -102,7 +102,7 @@ class ContactServiceTest extends TestCase {
    * @covers ::saveContact
    */
   public function testSaveContact(): void {
-    $contactData = new ContactData(NULL, 'John Doe', 'john.doe@example.com', '1234567890');
+    $contactData = new ContactData(name: 'John Doe', email: 'john.doe@example.com', phone: '1234567890');
 
     $insertQuery = $this->getMockBuilder(DatabaseQueryMock::class)
       ->onlyMethods(['fields', 'execute'])
@@ -202,7 +202,7 @@ class ContactServiceTest extends TestCase {
    * @covers ::updateContact
    */
   public function testUpdateContact(): void {
-    $contactData = new ContactData('1', 'John Doe', 'john.doe@example.com', '1234567890');
+    $contactData = new ContactData(name: 'John Doe', email: 'john.doe@example.com', phone: '1234567890', id: '1');
 
     $updateQuery = $this->getMockBuilder(DatabaseQueryMock::class)
       ->onlyMethods(['fields', 'condition', 'execute'])

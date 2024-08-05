@@ -29,7 +29,6 @@ class ContactDataExtractor {
     }
 
     return new ContactData(
-      NULL,
       (string) $request->request->get('name'),
       (string) $request->request->get('email'),
       (string) $request->request->get('phone')
