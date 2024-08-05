@@ -79,7 +79,8 @@ class ContactsController extends ControllerBase {
       if (empty($errors)) {
         $this->contactService->saveContact($contact_data);
 
-        return new RedirectResponse('/contacts');
+        $url = Url::fromRoute('htmx_plus_web_1_0_app.contacts')->toString();
+        return new RedirectResponse($url);
       }
 
       return [
@@ -146,7 +147,10 @@ class ContactsController extends ControllerBase {
       if (empty($errors)) {
         $this->contactService->updateContact($contact_data);
 
-        return new RedirectResponse("/contacts/" . $contact_id);
+        $url = Url::fromRoute('htmx_plus_web_1_0_app.contact_show', [
+          'contact_id' => $contact_id,
+        ])->toString();
+        return new RedirectResponse($url);
       }
 
       return [
