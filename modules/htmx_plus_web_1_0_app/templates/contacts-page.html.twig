@@ -1,0 +1,32 @@
+<form action="/contacts" method="get" class="tool-bar">
+	<label for="search">Search Term</label>
+  <input id="search" type="search" name="q" value="{{ search_query }}"/>
+</form>
+
+<table>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Email</th>
+      <th>Phone</th>
+			<th>Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for contact in contacts %}
+			<tr>
+				<td>{{ contact.name }}</td>
+        <td>{{ contact.email }}</td>
+				<td>{{ contact.phone }}</td>
+				<td>
+					<a href="/contacts/{{ contact.id }}/edit">Edit</a>
+					<a href="/contacts/{{ contact.id }}">View</a>
+				</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+<p>
+	<a href="/contacts/new">Add Contact</a>
+</p>
