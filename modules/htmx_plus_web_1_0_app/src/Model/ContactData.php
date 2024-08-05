@@ -10,6 +10,11 @@ namespace Drupal\htmx_plus_web_1_0_app\Model;
 final class ContactData {
 
   /**
+   * The ID.
+   */
+  private ?string $id;
+
+  /**
    * The name.
    */
   private string $name;
@@ -24,10 +29,25 @@ final class ContactData {
    */
   private string $phone;
 
-  public function __construct(string $name, string $email, string $phone) {
+  public function __construct(?string $id, string $name, string $email, string $phone) {
+    $this->id = $id;
     $this->name = $name;
     $this->email = $email;
     $this->phone = $phone;
+  }
+
+  /**
+   * Get the contact ID.
+   */
+  public function getId(): ?string {
+    return $this->id;
+  }
+
+  /**
+   * Set the contact ID.
+   */
+  public function setId(?string $id): void {
+    $this->id = $id;
   }
 
   /**

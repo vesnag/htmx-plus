@@ -9,6 +9,7 @@ use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Database\StatementInterface;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\htmx_plus_web_1_0_app\Model\ContactData;
 use Drupal\htmx_plus_web_1_0_app\Service\ContactService;
 use Drupal\htmx_plus_web_1_0_app\Test\Mocks\DatabaseQueryMock;
 use PHPUnit\Framework\TestCase;
@@ -101,9 +102,7 @@ class ContactServiceTest extends TestCase {
    * @covers ::saveContact
    */
   public function testSaveContact(): void {
-    $name = 'John Doe';
-    $email = 'john.doe@example.com';
-    $phone = '1234567890';
+    $contactData = new ContactData(NULL, 'John Doe', 'john.doe@example.com', '1234567890');
 
     $insertQuery = $this->getMockBuilder(DatabaseQueryMock::class)
       ->onlyMethods(['fields', 'execute'])
@@ -117,19 +116,18 @@ class ContactServiceTest extends TestCase {
     $insertQuery->expects($this->once())
       ->method('fields')
       ->with([
-        'name' => $name,
-        'email' => $email,
-        'phone' => $phone,
+        'name' => $contactData->getName(),
+        'email' => $contactData->getEmail(),
+        'phone' => $contactData->getPhone(),
       ])
       ->willReturnSelf();
 
     $insertQuery->expects($this->once())
       ->method('execute');
 
-    $this->contactService->saveContact($name, $email, $phone);
+    $this->contactService->saveContact($contactData);
 
     $this->assertTrue(TRUE);
-
   }
 
   /**
@@ -204,10 +202,7 @@ class ContactServiceTest extends TestCase {
    * @covers ::updateContact
    */
   public function testUpdateContact(): void {
-    $contact_id = '1';
-    $name = 'John Doe';
-    $email = 'john.doe@example.com';
-    $phone = '1234567890';
+    $contactData = new ContactData('1', 'John Doe', 'john.doe@example.com', '1234567890');
 
     $updateQuery = $this->getMockBuilder(DatabaseQueryMock::class)
       ->onlyMethods(['fields', 'condition', 'execute'])
@@ -221,21 +216,21 @@ class ContactServiceTest extends TestCase {
     $updateQuery->expects($this->once())
       ->method('fields')
       ->with([
-        'name' => $name,
-        'email' => $email,
-        'phone' => $phone,
+        'name' => $contactData->getName(),
+        'email' => $contactData->getEmail(),
+        'phone' => $contactData->getPhone(),
       ])
       ->willReturnSelf();
 
     $updateQuery->expects($this->once())
       ->method('condition')
-      ->with('id', $contact_id)
+      ->with('id', $contactData->getId())
       ->willReturnSelf();
 
     $updateQuery->expects($this->once())
       ->method('execute');
 
-    $this->contactService->updateContact($contact_id, $name, $email, $phone);
+    $this->contactService->updateContact($contactData);
   }
 
   /**

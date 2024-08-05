@@ -77,10 +77,7 @@ class ContactsController extends ControllerBase {
       $errors = $this->postRequestValidator->validateContactData($contact_data);
 
       if (empty($errors)) {
-        $this->contactService->saveContact(
-          $contact_data->getName(),
-          $contact_data->getEmail(),
-          $contact_data->getPhone());
+        $this->contactService->saveContact($contact_data);
 
         return new RedirectResponse('/contacts');
       }
@@ -142,15 +139,13 @@ class ContactsController extends ControllerBase {
 
     if ($request->isMethod('post')) {
       $contact_data = $this->contactDataExtractor->getContactDataFromPostRequest($request);
+      $contact_data->setId($contact_id);
+
       $errors = $this->postRequestValidator->validateContactData($contact_data);
 
       if (empty($errors)) {
-        $this->contactService->updateContact(
-              $contact_id,
-              $contact_data->getName(),
-              $contact_data->getEmail(),
-              $contact_data->getPhone(),
-          );
+        $this->contactService->updateContact($contact_data);
+
         return new RedirectResponse("/contacts/" . $contact_id);
       }
 
