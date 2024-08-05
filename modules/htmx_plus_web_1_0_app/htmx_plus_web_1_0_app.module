@@ -1,0 +1,56 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for htmx_plus_web_1_0_app module.
+ */
+
+/**
+ * Implements hook_theme().
+ *
+ * @phpstan-return array<string, array<string, mixed>>
+ *   An array of theme hook definitions.
+ */
+function htmx_plus_web_1_0_app_theme(): array {
+  return [
+    'contacts_page' => [
+      'variables' => [
+        'contacts' => [],
+      ],
+      'template' => 'contacts-page',
+    ],
+    'contacts_new' => [
+      'variables' => [
+        'contact' => [],
+        'errors' => [],
+      ],
+      'template' => 'contacts-new',
+    ],
+    'contact_show' => [
+      'variables' => [
+        'contact' => [],
+      ],
+      'template' => 'contact-show',
+    ],
+    'contact_edit' => [
+      'variables' => [
+        'contact' => [],
+        'errors' => [],
+      ],
+      'template' => 'contact-edit',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for page templates.
+ *
+ * @phpstan-param array<string, mixed> $variables
+ *   An associative array.
+ *
+ * @phpstan-return void
+ */
+function htmx_plus_web_1_0_app_preprocess_page(array &$variables): void {
+  $search_query = \Drupal::request()->query->get('q', '');
+  $variables['search_query'] = $search_query;
+}

@@ -1,0 +1,34 @@
+<form action="/contacts/new" method="post">
+  <fieldset>
+    <legend>Contact Values</legend>
+
+    <p>
+      <label for="name">Name</label>
+      <input name="name" id="name" type="text" placeholder="Name" value="{{ contact.name }}">
+      <span class="error">
+        {{ errors.name }}
+      </span>
+    </p>
+    <p>
+      <label for="email">Email</label>
+      <input name="email" id="email" type="email" placeholder="Email" value="{{ contact.email }}">
+      <span class="error">
+        {{ errors.email }}
+      </span>
+    </p>
+    <p>
+      <label for="phone">Phone</label>
+      <input name="phone" id="phone" type="tel" placeholder="Phone" value="{{ contact.phone }}">
+      <span class="error">
+        {{ errors.phone }}
+      </span>
+    </p>
+    <p>
+      <input type="submit" value="Save">
+    </p>
+  </fieldset>
+</form>
+
+<p>
+	<a href="/contacts">Back</a>
+</p>

@@ -1,0 +1,55 @@
+<?php
+
+/**
+ * @file
+ * Contains the installation file for the htmx_plus_web_1_0_app module.
+ */
+
+/**
+ * Implements hook_schema().
+ *
+ * Defines the database schema for the contacts table.
+ * The contacts table stores contact information.
+ *
+ * @phpstan-return array<string, array<string, mixed>>
+ *   An array defining the schema for the contacts table.
+ */
+function htmx_plus_web_1_0_app_schema() {
+  $schema['contacts'] = [
+    'description' => 'Stores contact information.',
+    'fields' => [
+      'id' => [
+        'description' => 'Primary Key: Unique contact ID.',
+        'type' => 'serial',
+        'not null' => TRUE,
+      ],
+      'name' => [
+        'description' => 'Name of the contact.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'email' => [
+        'description' => 'Email of the contact.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'phone' => [
+        'description' => 'Phone number of the contact.',
+        'type' => 'varchar',
+        'length' => 20,
+        'not null' => FALSE,
+      ],
+      'created' => [
+        'description' => 'Timestamp when the contact was created.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+    ],
+    'primary key' => ['id'],
+  ];
+
+  return $schema;
+}

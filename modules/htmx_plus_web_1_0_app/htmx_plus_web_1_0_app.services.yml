@@ -1,0 +1,13 @@
+services:
+  Drupal\htmx_plus_web_1_0_app\Controller\ContactsController:
+    arguments: ['@htmx_plus_web_1_0_app.contact_data_extractor', '@htmx_plus_web_1_0_app.post_request_validator']
+
+  htmx_plus_web_1_0_app.contact_service:
+    class: Drupal\htmx_plus_web_1_0_app\Service\ContactService
+    arguments: ['@database', '@entity_type.manager', '@htmx_plus_web_1_0_app.post_request_validator', '@htmx_plus_web_1_0_app.contact_data_extractor']
+
+  htmx_plus_web_1_0_app.post_request_validator:
+    class: Drupal\htmx_plus_web_1_0_app\Service\PostRequestValidator
+
+  htmx_plus_web_1_0_app.contact_data_extractor:
+    class: Drupal\htmx_plus_web_1_0_app\Service\ContactDataExtractor

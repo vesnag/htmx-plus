@@ -1,0 +1,40 @@
+<h1>Edit Contact</h1>
+
+<form method="post" action="/contacts/{{ contact.id }}/edit">
+  <div>
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" value="{{ contact.name }}">
+    {% if errors.name %}
+      <div class="error">{{ errors.name }}</div>
+    {% endif %}
+  </div>
+  <div>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" value="{{ contact.email }}">
+    {% if errors.email %}
+      <div class="error">{{ errors.email }}</div>
+    {% endif %}
+  </div>
+  <div>
+    <label for="phone">Phone:</label>
+    <input type="text" id="phone" name="phone" value="{{ contact.phone }}">
+    {% if errors.phone %}
+      <div class="error">{{ errors.phone }}</div>
+    {% endif %}
+  </div>
+  <div>
+    <button type="submit">Save</button>
+  </div>
+</form>
+
+<form action="/contacts/{{ contact.id }}/delete" method="post">
+	<button>Delete Contact</button>
+</form>
+
+<p>
+  <a href="/contacts/{{ contact.id }}">Back to Contact</a>
+</p>
+
+<p>
+	<a href="/contacts/">Back</a>
+</p>
