@@ -73,11 +73,15 @@ class ContactsController extends ControllerBase {
    */
   public function new(Request $request): array|RedirectResponse {
     if ($request->isMethod('post')) {
-      $contact_data = $this->contactDataExtractor->getContactData($request);
+      $contact_data = $this->contactDataExtractor->getContactDataFromPostRequest($request);
       $errors = $this->postRequestValidator->validateContactData($contact_data);
 
       if (empty($errors)) {
-        $this->contactService->saveContact($contact_data['name'], $contact_data['email'], $contact_data['phone']);
+        $this->contactService->saveContact(
+          $contact_data->getName(),
+          $contact_data->getEmail(),
+          $contact_data->getPhone());
+
         return new RedirectResponse('/contacts');
       }
 
@@ -137,15 +141,15 @@ class ContactsController extends ControllerBase {
     }
 
     if ($request->isMethod('post')) {
-      $contact_data = $this->contactDataExtractor->getContactData($request);
+      $contact_data = $this->contactDataExtractor->getContactDataFromPostRequest($request);
       $errors = $this->postRequestValidator->validateContactData($contact_data);
 
       if (empty($errors)) {
         $this->contactService->updateContact(
               $contact_id,
-              (string) $contact_data['name'],
-              (string) $contact_data['email'],
-              (string) $contact_data['phone']
+              $contact_data->getName(),
+              $contact_data->getEmail(),
+              $contact_data->getPhone(),
           );
         return new RedirectResponse("/contacts/" . $contact_id);
       }

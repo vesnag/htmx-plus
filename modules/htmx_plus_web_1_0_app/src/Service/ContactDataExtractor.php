@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\htmx_plus_web_1_0_app\Service;
 
+use Drupal\htmx_plus_web_1_0_app\Model\ContactData;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -17,19 +18,21 @@ class ContactDataExtractor {
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   The request object.
    *
-   * @return array<string,string>
+   * @return \Drupal\htmx_plus_web_1_0_app\Model\ContactData
    *   The contact data.
+   *
+   * @throws \InvalidArgumentException
    */
-  public function getContactData(Request $request): array {
+  public function getContactDataFromPostRequest(Request $request): ContactData {
     if (FALSE === $request->isMethod('post')) {
-      return [];
+      throw new \InvalidArgumentException('Invalid request method. Expected POST.');
     }
 
-    return [
-      'name' => (string) $request->request->get('name'),
-      'email' => (string) $request->request->get('email'),
-      'phone' => (string) $request->request->get('phone'),
-    ];
+    return new ContactData(
+      (string) $request->request->get('name'),
+      (string) $request->request->get('email'),
+      (string) $request->request->get('phone')
+    );
   }
 
 }
