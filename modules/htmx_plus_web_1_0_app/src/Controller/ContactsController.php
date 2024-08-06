@@ -12,6 +12,7 @@ use Drupal\htmx_plus_web_1_0_app\Service\PostRequestValidator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -72,27 +73,26 @@ class ContactsController extends ControllerBase {
    *   A render array or a redirect response.
    */
   public function new(Request $request): array|RedirectResponse {
-    if ($request->isMethod('post')) {
-      $contact_data = $this->contactDataExtractor->getContactDataFromPostRequest($request);
-      $errors = $this->postRequestValidator->validateContactData($contact_data);
-
-      if (empty($errors)) {
-        $this->contactService->saveContact($contact_data);
-
-        $url = Url::fromRoute('htmx_plus_web_1_0_app.contacts')->toString();
-        return new RedirectResponse($url);
-      }
-
-      return [
-        '#theme' => 'contacts_new',
-        '#contact' => $contact_data,
-        '#errors' => $errors,
-      ];
+    if (FALSE === $request->isMethod('post')) {
+      throw new MethodNotAllowedHttpException(['POST'], 'Method not allowed');
     }
+
+    /** @var \Drupal\htmx_plus_web_1_0_app\Model\ContactData $contactData */
+    $contactData = $this->contactDataExtractor->getContactDataFromPostRequest($request);
+    /** @var \Drupal\htmx_plus_web_1_0_app\Model\ValidationResult $validationResult */
+    $validationResult = $this->postRequestValidator->validateContactData($contactData);
+
+    if (!$validationResult->hasErrors()) {
+      $this->contactService->saveContact($contactData);
+
+      $url = Url::fromRoute('htmx_plus_web_1_0_app.contacts')->toString();
+      return new RedirectResponse($url);
+    }
+
     return [
       '#theme' => 'contacts_new',
-      '#contact' => [],
-      '#errors' => [],
+      '#contact' => $contactData,
+      '#errors' => $validationResult->getErrors(),
     ];
   }
 
@@ -132,39 +132,37 @@ class ContactsController extends ControllerBase {
    *   A render array or a redirect response.
    */
   public function edit(string $contact_id, Request $request): array|RedirectResponse {
+    if (FALSE === $request->isMethod('post')) {
+      throw new MethodNotAllowedHttpException(['POST'], 'Method not allowed');
+    }
+
     $contact = $this->contactService->getContactById($contact_id);
 
     if (!is_array($contact)) {
       throw new NotFoundHttpException();
     }
 
-    if ($request->isMethod('post')) {
-      $contact_data = $this->contactDataExtractor->getContactDataFromPostRequest($request);
-      $contact_data->setId($contact_id);
+    /** @var \Drupal\htmx_plus_web_1_0_app\Model\ContactData $contactData */
+    $contactData = $this->contactDataExtractor->getContactDataFromPostRequest($request);
+    $contactData->setId($contact_id);
 
-      $errors = $this->postRequestValidator->validateContactData($contact_data);
+    /** @var \Drupal\htmx_plus_web_1_0_app\Model\ValidationResult $validationResult */
+    $validationResult = $this->postRequestValidator->validateContactData($contactData);
 
-      if (empty($errors)) {
-        $this->contactService->updateContact($contact_data);
-
-        $url = Url::fromRoute('htmx_plus_web_1_0_app.contact_show', [
-          'contact_id' => $contact_id,
-        ])->toString();
-        return new RedirectResponse($url);
-      }
-
+    if ($validationResult->hasErrors()) {
       return [
         '#theme' => 'contact_edit',
-        '#contact' => $contact_data,
-        '#errors' => $errors,
+        '#contact' => $contactData,
+        '#errors' => $validationResult->getErrors(),
       ];
     }
 
-    return [
-      '#theme' => 'contact_edit',
-      '#contact' => $contact,
-      '#errors' => [],
-    ];
+    $this->contactService->updateContact($contactData);
+
+    $url = Url::fromRoute('htmx_plus_web_1_0_app.contact_show', [
+      'contact_id' => $contact_id,
+    ])->toString();
+    return new RedirectResponse($url);
   }
 
   /**

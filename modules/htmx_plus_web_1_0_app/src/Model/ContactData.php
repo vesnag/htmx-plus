@@ -17,19 +17,24 @@ final class ContactData {
   /**
    * The name.
    */
-  private string $name;
+  private readonly string $name;
 
   /**
    * The email.
    */
-  private string $email;
+  private readonly string $email;
 
   /**
    * The phone.
    */
-  private string $phone;
+  private readonly string $phone;
 
-  public function __construct(string $name, string $email, string $phone, ?string $id = NULL) {
+  public function __construct(
+    string $name,
+    string $email,
+    string $phone,
+    ?string $id = NULL,
+  ) {
     $this->id = $id;
     $this->name = $name;
     $this->email = $email;

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\htmx_plus_web_1_0_app\Service;
 
 use Drupal\htmx_plus_web_1_0_app\Model\ContactData;
+use Drupal\htmx_plus_web_1_0_app\Model\ValidationResult;
 
 /**
  * Validates POST requests.
@@ -17,22 +18,23 @@ class PostRequestValidator {
    * @param \Drupal\htmx_plus_web_1_0_app\Model\ContactData $contact_data
    *   The contact data.
    *
-   * @return array<string,string>
-   *   An array of errors.
+   * @return \Drupal\htmx_plus_web_1_0_app\Model\ValidationResult
+   *   The validation result.
    */
-  public function validateContactData(ContactData $contact_data): array {
-    $errors = [];
+  public function validateContactData(ContactData $contact_data): ValidationResult {
+    $validationResult = new ValidationResult();
+
     if (empty($contact_data->getName())) {
-      $errors['name'] = 'Name is required.';
+      $validationResult->addError('name', 'Name is required.');
     }
     if (empty($contact_data->getEmail())) {
-      $errors['email'] = 'Email is required.';
+      $validationResult->addError('email', 'Email is required.');
     }
     if (empty($contact_data->getPhone())) {
-      $errors['phone'] = 'Phone is required.';
+      $validationResult->addError('phone', 'Phone is required.');
     }
 
-    return $errors;
+    return $validationResult;
   }
 
 }
