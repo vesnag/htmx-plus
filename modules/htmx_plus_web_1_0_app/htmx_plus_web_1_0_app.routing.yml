@@ -4,6 +4,7 @@ htmx_plus_web_1_0_app.contacts:
     _controller: '\Drupal\htmx_plus_web_1_0_app\Controller\ContactsController::contacts'
   requirements:
     _permission: 'access content'
+  methods: [GET]
 
 htmx_plus_web_1_0_app.contacts_new:
   path: '/contacts/new'
@@ -12,6 +13,7 @@ htmx_plus_web_1_0_app.contacts_new:
     _title: 'New Contact'
   requirements:
     _permission: 'access content'
+  methods: [GET, POST]
 
 htmx_plus_web_1_0_app.contact_show:
   path: '/contacts/{contact_id}'
@@ -21,6 +23,7 @@ htmx_plus_web_1_0_app.contact_show:
   requirements:
     _permission: 'access content'
     contact_id: '\d+'
+  methods: [GET]
 
 htmx_plus_web_1_0_app.contact_edit:
   path: '/contacts/{contact_id}/edit'
@@ -30,6 +33,7 @@ htmx_plus_web_1_0_app.contact_edit:
   requirements:
     _permission: 'access content'
     contact_id: '\d+'
+  methods: [GET, POST]
 
 htmx_plus_web_1_0_app.contact_delete:
   path: '/contacts/{contact_id}/delete'
@@ -37,3 +41,5 @@ htmx_plus_web_1_0_app.contact_delete:
     _controller: '\Drupal\htmx_plus_web_1_0_app\Controller\ContactsController::delete'
   requirements:
     _permission: 'delete contacts'
+    contact_id: '\d+'
+  methods: [POST]

@@ -1,26 +1,22 @@
+{% import 'modules/custom/htmx_plus/modules/htmx_plus_web_1_0_app/templates/macro/form_errors.html.twig' as formErrors %}
+
 <h1>Edit Contact</h1>
 
 <form method="post" action="/contacts/{{ contact.id }}/edit">
   <div>
     <label for="name">Name:</label>
     <input type="text" id="name" name="name" value="{{ contact.name }}">
-    {% if errors.name %}
-      <div class="error">{{ errors.name }}</div>
-    {% endif %}
+    {{ formErrors.displayError(validationResult, 'name') }}
   </div>
   <div>
     <label for="email">Email:</label>
     <input type="email" id="email" name="email" value="{{ contact.email }}">
-    {% if errors.email %}
-      <div class="error">{{ errors.email }}</div>
-    {% endif %}
+    {{ formErrors.displayError(validationResult, 'email') }}
   </div>
   <div>
     <label for="phone">Phone:</label>
     <input type="text" id="phone" name="phone" value="{{ contact.phone }}">
-    {% if errors.phone %}
-      <div class="error">{{ errors.phone }}</div>
-    {% endif %}
+    {{ formErrors.displayError(validationResult, 'phone') }}
   </div>
   <div>
     <button type="submit">Save</button>
@@ -36,5 +32,5 @@
 </p>
 
 <p>
-	<a href="/contacts/">Back</a>
+	<a href="/contacts/">Back to Contacts</a>
 </p>

@@ -35,7 +35,7 @@ function htmx_plus_web_1_0_app_theme(): array {
     'contact_edit' => [
       'variables' => [
         'contact' => [],
-        'errors' => [],
+        'validationResult' => [],
       ],
       'template' => 'contact-edit',
     ],

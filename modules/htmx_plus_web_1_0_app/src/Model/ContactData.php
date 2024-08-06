@@ -44,7 +44,7 @@ final class ContactData {
   /**
    * Get the contact ID.
    */
-  public function getId(): ?string {
+  public function id(): ?string {
     return $this->id;
   }
 

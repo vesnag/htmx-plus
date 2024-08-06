@@ -232,7 +232,7 @@ class ContactServiceTest extends TestCase {
 
     $updateQuery->expects($this->once())
       ->method('condition')
-      ->with('id', $contactData->getId())
+      ->with('id', $contactData->id())
       ->willReturnSelf();
 
     $updateQuery->expects($this->once())

@@ -12,6 +12,7 @@ use Drupal\htmx_plus_web_1_0_app\Service\PostRequestValidator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -143,7 +144,7 @@ class ContactsController extends ControllerBase {
         return [
           '#theme' => 'contact_edit',
           '#contact' => $contactData,
-          '#errors' => $validationResult->getErrors(),
+          '#validationResult' => $validationResult,
         ];
       }
 
@@ -164,7 +165,7 @@ class ContactsController extends ControllerBase {
     return [
       '#theme' => 'contact_edit',
       '#contact' => $contact,
-      '#errors' => [],
+      '#validationResult' => [],
     ];
   }
 
@@ -180,6 +181,10 @@ class ContactsController extends ControllerBase {
    *   A render array or a redirect response.
    */
   public function delete(string $contact_id, Request $request): array|RedirectResponse {
+    if (FALSE === $request->isMethod('post')) {
+      throw new MethodNotAllowedHttpException(['POST'], 'Method Not Allowed');
+    }
+
     $contact = $this->contactService->getContactById($contact_id);
 
     if (NULL === $contact) {
@@ -192,11 +197,6 @@ class ContactsController extends ControllerBase {
       $url = Url::fromRoute('htmx_plus_web_1_0_app.contacts')->toString();
       return new RedirectResponse($url);
     }
-
-    $url = Url::fromRoute('htmx_plus_web_1_0_app.contact_edit', [
-      'contact_id' => $contact_id,
-    ])->toString();
-    return new RedirectResponse($url);
   }
 
   /**

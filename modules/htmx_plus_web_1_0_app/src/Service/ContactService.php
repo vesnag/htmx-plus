@@ -127,17 +127,17 @@ class ContactService {
   /**
    * Updates a contact.
    *
-   * @param \Drupal\htmx_plus_web_1_0_app\Model\ContactData $contact_data
+   * @param \Drupal\htmx_plus_web_1_0_app\Model\ContactData $contactData
    *   The contact data.
    */
-  public function updateContact(ContactData $contact_data): void {
+  public function updateContact(ContactData $contactData): void {
     $this->database->update('contacts')
       ->fields([
-        'name' => $contact_data->getName(),
-        'email' => $contact_data->getEmail(),
-        'phone' => $contact_data->getPhone(),
+        'name' => $contactData->getName(),
+        'email' => $contactData->getEmail(),
+        'phone' => $contactData->getPhone(),
       ])
-      ->condition('id', $contact_data->getId())
+      ->condition('id', $contactData->id())
       ->execute();
   }
 
