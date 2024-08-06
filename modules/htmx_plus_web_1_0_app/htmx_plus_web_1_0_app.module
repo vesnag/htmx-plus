@@ -22,7 +22,7 @@ function htmx_plus_web_1_0_app_theme(): array {
     'contacts_new' => [
       'variables' => [
         'contact' => [],
-        'errors' => [],
+        'validationResult' => [],
       ],
       'template' => 'contacts-new',
     ],

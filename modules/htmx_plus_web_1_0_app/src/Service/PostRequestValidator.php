@@ -27,6 +27,7 @@ class PostRequestValidator {
     if (empty($contact_data->getName())) {
       $validationResult->addError('name', 'Name is required.');
     }
+    // @todo Validate also email format. For now it is not relevant
     if (empty($contact_data->getEmail())) {
       $validationResult->addError('email', 'Email is required.');
     }

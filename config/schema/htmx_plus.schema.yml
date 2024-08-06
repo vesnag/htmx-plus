@@ -1,0 +1,7 @@
+htmx_plus.settings:
+  type: config_object
+  label: 'HTMX Plus settings'
+  mapping:
+    debug_enabled:
+      type: boolean
+      label: 'Debug enabled'

@@ -1,3 +1,5 @@
+{% import 'modules/custom/htmx_plus/modules/htmx_plus_web_1_0_app/templates/macro/form_errors.html.twig' as formErrors %}
+
 <form action="/contacts/new" method="post">
   <fieldset>
     <legend>Contact Values</legend>
@@ -5,23 +7,17 @@
     <p>
       <label for="name">Name</label>
       <input name="name" id="name" type="text" placeholder="Name" value="{{ contact.name }}">
-      <span class="error">
-        {{ errors.name }}
-      </span>
+      {{ formErrors.displayError(validationResult, 'name') }}
     </p>
     <p>
       <label for="email">Email</label>
       <input name="email" id="email" type="email" placeholder="Email" value="{{ contact.email }}">
-      <span class="error">
-        {{ errors.email }}
-      </span>
+      {{ formErrors.displayError(validationResult, 'email') }}
     </p>
     <p>
       <label for="phone">Phone</label>
       <input name="phone" id="phone" type="tel" placeholder="Phone" value="{{ contact.phone }}">
-      <span class="error">
-        {{ errors.phone }}
-      </span>
+      {{ formErrors.displayError(validationResult, 'phone') }}
     </p>
     <p>
       <input type="submit" value="Save">

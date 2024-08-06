@@ -1,0 +1,9 @@
+{% macro displayError(validationResult, field) %}
+	{% if validationResult.hasErrors() %}
+		{% for error in validationResult.getErrors() %}
+			{% if error.getField() == field %}
+				<span class="error">{{ error.getMessage() }}</span>
+			{% endif %}
+		{% endfor %}
+	{% endif %}
+{% endmacro %}

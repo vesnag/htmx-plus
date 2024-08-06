@@ -12,7 +12,6 @@ use Drupal\htmx_plus_web_1_0_app\Service\PostRequestValidator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -74,7 +73,11 @@ class ContactsController extends ControllerBase {
    */
   public function new(Request $request): array|RedirectResponse {
     if (FALSE === $request->isMethod('post')) {
-      throw new MethodNotAllowedHttpException(['POST'], 'Method not allowed');
+      return [
+        '#theme' => 'contacts_new',
+        '#contact' => [],
+        '#validationResult' => [],
+      ];
     }
 
     $contactData = $this->contactDataExtractor->getContactDataFromPostRequest($request);
@@ -90,7 +93,7 @@ class ContactsController extends ControllerBase {
     return [
       '#theme' => 'contacts_new',
       '#contact' => $contactData,
-      '#errors' => $validationResult->getErrors(),
+      '#validationResult' => $validationResult,
     ];
   }
 
@@ -130,8 +133,26 @@ class ContactsController extends ControllerBase {
    *   A render array or a redirect response.
    */
   public function edit(string $contact_id, Request $request): array|RedirectResponse {
-    if (FALSE === $request->isMethod('post')) {
-      throw new MethodNotAllowedHttpException(['POST'], 'Method not allowed');
+    if (TRUE === $request->isMethod('post')) {
+      $contactData = $this->contactDataExtractor->getContactDataFromPostRequest($request);
+      $contactData->setId($contact_id);
+
+      $validationResult = $this->postRequestValidator->validateContactData($contactData);
+
+      if ($validationResult->hasErrors()) {
+        return [
+          '#theme' => 'contact_edit',
+          '#contact' => $contactData,
+          '#errors' => $validationResult->getErrors(),
+        ];
+      }
+
+      $this->contactService->updateContact($contactData);
+
+      $url = Url::fromRoute('htmx_plus_web_1_0_app.contact_show', [
+        'contact_id' => $contact_id,
+      ])->toString();
+      return new RedirectResponse($url);
     }
 
     $contact = $this->contactService->getContactById($contact_id);
@@ -140,25 +161,11 @@ class ContactsController extends ControllerBase {
       throw new NotFoundHttpException();
     }
 
-    $contactData = $this->contactDataExtractor->getContactDataFromPostRequest($request);
-    $contactData->setId($contact_id);
-
-    $validationResult = $this->postRequestValidator->validateContactData($contactData);
-
-    if ($validationResult->hasErrors()) {
-      return [
-        '#theme' => 'contact_edit',
-        '#contact' => $contactData,
-        '#errors' => $validationResult->getErrors(),
-      ];
-    }
-
-    $this->contactService->updateContact($contactData);
-
-    $url = Url::fromRoute('htmx_plus_web_1_0_app.contact_show', [
-      'contact_id' => $contact_id,
-    ])->toString();
-    return new RedirectResponse($url);
+    return [
+      '#theme' => 'contact_edit',
+      '#contact' => $contact,
+      '#errors' => [],
+    ];
   }
 
   /**
