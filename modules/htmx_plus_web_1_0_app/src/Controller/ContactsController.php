@@ -77,9 +77,7 @@ class ContactsController extends ControllerBase {
       throw new MethodNotAllowedHttpException(['POST'], 'Method not allowed');
     }
 
-    /** @var \Drupal\htmx_plus_web_1_0_app\Model\ContactData $contactData */
     $contactData = $this->contactDataExtractor->getContactDataFromPostRequest($request);
-    /** @var \Drupal\htmx_plus_web_1_0_app\Model\ValidationResult $validationResult */
     $validationResult = $this->postRequestValidator->validateContactData($contactData);
 
     if (!$validationResult->hasErrors()) {
@@ -110,7 +108,7 @@ class ContactsController extends ControllerBase {
   public function show(string $contact_id): array {
     $contact = $this->contactService->getContactById($contact_id);
 
-    if (!is_array($contact)) {
+    if (NULL === $contact) {
       throw new NotFoundHttpException();
     }
 
@@ -138,15 +136,13 @@ class ContactsController extends ControllerBase {
 
     $contact = $this->contactService->getContactById($contact_id);
 
-    if (!is_array($contact)) {
+    if (NULL === $contact) {
       throw new NotFoundHttpException();
     }
 
-    /** @var \Drupal\htmx_plus_web_1_0_app\Model\ContactData $contactData */
     $contactData = $this->contactDataExtractor->getContactDataFromPostRequest($request);
     $contactData->setId($contact_id);
 
-    /** @var \Drupal\htmx_plus_web_1_0_app\Model\ValidationResult $validationResult */
     $validationResult = $this->postRequestValidator->validateContactData($contactData);
 
     if ($validationResult->hasErrors()) {
@@ -179,7 +175,7 @@ class ContactsController extends ControllerBase {
   public function delete(string $contact_id, Request $request): array|RedirectResponse {
     $contact = $this->contactService->getContactById($contact_id);
 
-    if (!is_array($contact)) {
+    if (NULL === $contact) {
       throw new NotFoundHttpException();
     }
 

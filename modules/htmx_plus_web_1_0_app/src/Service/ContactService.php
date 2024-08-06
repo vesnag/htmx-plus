@@ -99,17 +99,29 @@ class ContactService {
    * @param string $contact_id
    *   The contact ID.
    *
-   * @return array<string, mixed>|bool
-   *   An associative array representing the contact, or FALSE if not found.
+   * @return \Drupal\htmx_plus_web_1_0_app\Model\ContactData|null
+   *   The contact data, or NULL if the contact does not exist.
    */
-  public function getContactById(string $contact_id): array|bool {
+  public function getContactById(string $contact_id): ?ContactData {
     $query = $this->database->select('contacts', 'c')
       ->fields('c', ['id', 'name', 'email', 'phone'])
       ->condition('id', $contact_id);
 
     /** @var \Drupal\Core\Database\StatementInterface|array[] $statement */
     $statement = $query->execute();
-    return $statement->fetchAssoc();
+    $contact = $statement->fetchAssoc();
+
+    if (FALSE === $contact) {
+      return NULL;
+    }
+
+    return is_array($contact) ? new ContactData(
+      $contact['name'],
+      $contact['email'],
+      $contact['phone'],
+      (string) $contact['id']
+      ) : NULL;
+
   }
 
   /**

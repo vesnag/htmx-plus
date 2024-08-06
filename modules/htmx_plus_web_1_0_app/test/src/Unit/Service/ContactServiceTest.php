@@ -195,7 +195,15 @@ class ContactServiceTest extends TestCase {
 
     $contact = $this->contactService->getContactById($contact_id);
 
-    $this->assertEquals($result, $contact);
+    $expectedContact = new ContactData(
+      $result['name'],
+      $result['email'],
+      $result['phone'],
+      (string) $result['id']
+    );
+
+    $this->assertEquals($expectedContact, $contact);
+
   }
 
   /**
