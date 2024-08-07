@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\htmx_plus\Cache\Context;
 
 use Drupal\Core\Cache\CacheableMetadata;

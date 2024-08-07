@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\htmx_plus_random_number\Plugin\Block;
 
 use Drupal\Core\Block\Attribute\Block;
