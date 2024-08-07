@@ -8,10 +8,12 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
 use Drupal\htmx_plus_web_1_0_app\Service\ContactDataExtractor;
 use Drupal\htmx_plus_web_1_0_app\Service\ContactService;
+use Drupal\htmx_plus_web_1_0_app\Service\ContactsRenderer;
 use Drupal\htmx_plus_web_1_0_app\Service\PostRequestValidator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -31,11 +33,14 @@ class ContactsController extends ControllerBase {
    *   The contact data extractor.
    * @param \Drupal\htmx_plus_web_1_0_app\Service\PostRequestValidator $postRequestValidator
    *   The post request validator.
+   * @param \Drupal\htmx_plus_web_1_0_app\Service\ContactsRenderer $contactsRenderer
+   *   The contacts renderer.
    */
   public function __construct(
-    protected ContactService $contactService,
-    protected ContactDataExtractor $contactDataExtractor,
-    protected PostRequestValidator $postRequestValidator,
+    private ContactService $contactService,
+    private ContactDataExtractor $contactDataExtractor,
+    private PostRequestValidator $postRequestValidator,
+    private ContactsRenderer $contactsRenderer,
   ) {
   }
 
@@ -48,19 +53,10 @@ class ContactsController extends ControllerBase {
    * @return array<string,mixed>
    *   A render array.
    */
-  public function contacts(Request $request): array {
-    $search = (string) $request->query->get('q');
-    if ('' !== $search) {
-      $contacts_set = $this->contactService->search($search);
-    }
-    else {
-      $contacts_set = $this->contactService->all();
-    }
+  public function contacts(Request $request): Response|array {
+    $contacts = $this->getContacts($request);
 
-    return [
-      '#theme' => 'contacts_page',
-      '#contacts' => $contacts_set,
-    ];
+    return $this->contactsRenderer->renderContactPage($request, $contacts);
   }
 
   /**
@@ -207,7 +203,24 @@ class ContactsController extends ControllerBase {
       $container->get('htmx_plus_web_1_0_app.contact_service'),
       $container->get('htmx_plus_web_1_0_app.contact_data_extractor'),
       $container->get('htmx_plus_web_1_0_app.post_request_validator'),
+      $container->get('htmx_plus_web_1_0_app.contacts_renderer'),
     );
+  }
+
+  /**
+   * Gets the contacts set based on the search query.
+   *
+   * @return mixed[]
+   *   The contacts set.
+   */
+  private function getContacts(Request $request): array {
+    $search = (string) $request->query->get('q');
+    if ('' !== $search) {
+      return $this->contactService->search($search);
+    }
+
+    return $this->contactService->all();
+
   }
 
 }

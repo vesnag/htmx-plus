@@ -11,3 +11,10 @@ services:
 
   htmx_plus_web_1_0_app.contact_data_extractor:
     class: Drupal\htmx_plus_web_1_0_app\Service\ContactDataExtractor
+
+  htmx_plus_web_1_0_app.htmx_request_checker:
+    class: Drupal\htmx_plus_web_1_0_app\Service\HtmxRequestChecker
+
+  htmx_plus_web_1_0_app.contacts_renderer:
+    class: Drupal\htmx_plus_web_1_0_app\Service\ContactsRenderer
+    arguments: ['@htmx_plus_web_1_0_app.htmx_request_checker', '@renderer']
