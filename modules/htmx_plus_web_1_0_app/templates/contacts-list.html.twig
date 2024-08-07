@@ -1,0 +1,5 @@
+<ul>
+  {% for contact in contacts %}
+    <li><a href="mailto:{{ contact.email }}">{{ contact.name }}</a></li>
+  {% endfor %}
+</ul>

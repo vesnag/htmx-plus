@@ -34,10 +34,37 @@ final class ContactsRenderer {
     $render_array = [
       '#theme' => 'contacts_page',
       '#contacts' => $contacts,
+      '#cache' => [
+        'contexts' => ['request_type'],
+      ],
     ];
 
-    $render_array['#cache'] = [
-      'contexts' => ['request_type'],
+    if (TRUE === $this->htmxRequestChecker->isHtmxRequest($request)) {
+      $html_content = $this->renderer->render($render_array)->__toString();
+      return new Response($html_content);
+    }
+
+    return $render_array;
+  }
+
+  /**
+   * Renders the contacts list.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   The request object.
+   * @param array<int,array<string, mixed>> $contacts
+   *   The contacts to render.
+   *
+   * @return \Symfony\Component\HttpFoundation\Response|array<string,mixed>
+   *   A render array or a response object.
+   */
+  public function renderContactsList(Request $request, array $contacts): Response|array {
+    $render_array = [
+      '#theme' => 'contacts_list',
+      '#contacts' => $contacts,
+      '#cache' => [
+        'contexts' => ['request_type'],
+      ],
     ];
 
     if (TRUE === $this->htmxRequestChecker->isHtmxRequest($request)) {

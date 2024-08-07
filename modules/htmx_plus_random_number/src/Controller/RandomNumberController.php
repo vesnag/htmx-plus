@@ -58,7 +58,7 @@ class RandomNumberController extends ControllerBase {
       '#markup' => $html_content,
     ];
 
-    $html_content = $this->renderer->renderInIsolation($build);
+    $html_content = $this->renderer->renderInIsolation($build)->__toString();
 
     return new Response($html_content);
   }

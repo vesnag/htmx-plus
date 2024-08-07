@@ -4,7 +4,13 @@ htmx_plus_web_1_0_app.contacts:
     _controller: '\Drupal\htmx_plus_web_1_0_app\Controller\ContactsController::contacts'
   requirements:
     _permission: 'access content'
-  methods: [GET]
+
+htmx_plus_web_1_0_app.get_contacts:
+  path: '/get-contacts'
+  defaults:
+    _controller: '\Drupal\htmx_plus_web_1_0_app\Controller\ContactsController::builContactList'
+  requirements:
+    _permission: 'access content'
 
 htmx_plus_web_1_0_app.contacts_new:
   path: '/contacts/new'
@@ -23,7 +29,6 @@ htmx_plus_web_1_0_app.contact_show:
   requirements:
     _permission: 'access content'
     contact_id: '\d+'
-  methods: [GET]
 
 htmx_plus_web_1_0_app.contact_edit:
   path: '/contacts/{contact_id}/edit'

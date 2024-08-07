@@ -50,7 +50,7 @@ class ContactsController extends ControllerBase {
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   The request object.
    *
-   * @return array<string,mixed>
+   * @return array<string,mixed>|\Symfony\Component\HttpFoundation\Response
    *   A render array.
    */
   public function contacts(Request $request): Response|array {
@@ -193,6 +193,21 @@ class ContactsController extends ControllerBase {
       $url = Url::fromRoute('htmx_plus_web_1_0_app.contacts')->toString();
       return new RedirectResponse($url);
     }
+  }
+
+  /**
+   * Returns a list of contacts.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   The request object.
+   *
+   * @return array<string,mixed>|\Symfony\Component\HttpFoundation\Response
+   *   A render array.
+   */
+  public function builContactList(Request $request): Response|array {
+    $contacts = $this->contactService->all();
+
+    return $this->contactsRenderer->renderContactsList($request, $contacts);
   }
 
   /**

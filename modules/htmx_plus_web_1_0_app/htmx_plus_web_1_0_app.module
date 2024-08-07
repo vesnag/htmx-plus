@@ -17,27 +17,33 @@ function htmx_plus_web_1_0_app_theme(): array {
       'variables' => [
         'contacts' => [],
       ],
-      'template' => 'contacts-page',
     ],
     'contacts_new' => [
       'variables' => [
         'contact' => [],
         'validationResult' => [],
       ],
-      'template' => 'contacts-new',
     ],
     'contact_show' => [
       'variables' => [
         'contact' => [],
       ],
-      'template' => 'contact-show',
     ],
     'contact_edit' => [
       'variables' => [
         'contact' => [],
         'validationResult' => [],
       ],
-      'template' => 'contact-edit',
+    ],
+    'get_the_contacts_button_block' => [
+      'variables' => [
+        'button_text' => '',
+      ],
+    ],
+    'contacts_list' => [
+      'variables' => [
+        'contacts' => [],
+      ],
     ],
   ];
 }
