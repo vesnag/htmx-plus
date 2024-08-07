@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\htmx_plus_web_1_0_app\Service;
+namespace Drupal\htmx_plus\Service;
 
 use Symfony\Component\HttpFoundation\Request;
 

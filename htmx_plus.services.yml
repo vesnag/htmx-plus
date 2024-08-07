@@ -8,12 +8,15 @@ services:
     arguments: ['@path.matcher']
 
   htmx_plus.config_service:
-    class: 'Drupal\htmx_plus\Service\ConfigService'
+    class: Drupal\htmx_plus\Service\ConfigService
     arguments: ['@config.factory', '@state']
 
   htmx_plus.htmx_debug_checker:
-    class: 'Drupal\htmx_plus\Checker\HtmxDebugChecker'
+    class: Drupal\htmx_plus\Checker\HtmxDebugChecker
     arguments: ['@htmx_plus.config_service']
+
+  htmx_plus.htmx_request_checker:
+    class: Drupal\htmx_plus\Service\HtmxRequestChecker
 
   htmx_plus.debug_library_subscriber:
     class: Drupal\htmx_plus\EventSubscriber\HtmxDebugLibrarySubscriber
@@ -39,4 +42,8 @@ services:
        - method: addChecker
          arguments: ['@htmx_plus.htmx_debug_checker']
 
-
+  cache_context.request_type:
+    class: Drupal\htmx_plus\Cache\Context\RequestTypeCacheContext
+    arguments: ['@request_stack', '@htmx_plus.htmx_request_checker']
+    tags:
+      - { name: cache.context, context_id: 'request_type' }

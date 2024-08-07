@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\htmx_plus_web_1_0_app\Service;
 
 use Drupal\Core\Render\RendererInterface;
+use Drupal\htmx_plus\Service\HtmxRequestChecker;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -35,9 +36,13 @@ final class ContactsRenderer {
       '#contacts' => $contacts,
     ];
 
+    $render_array['#cache'] = [
+      'contexts' => ['request_type'],
+    ];
+
     if (TRUE === $this->htmxRequestChecker->isHtmxRequest($request)) {
-      $html_cotnent = $this->renderer->render($render_array)->__toString();
-      return new Response($html_cotnent);
+      $html_content = $this->renderer->render($render_array)->__toString();
+      return new Response($html_content);
     }
 
     return $render_array;
