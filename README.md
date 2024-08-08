@@ -23,6 +23,9 @@ Provides a Drush command `htmx:debug` to toggle debug mode on all HTMX elements.
 You can enable debug mode with `drush htmx:debug on` and disable it with
 `drush htmx:debug off`.
 
+- **HTMX Plus Web 1.0 App:**
+The `htmx_plus_web_1_0_app` submodule provides the HTMX Plus Web 1.0 Application
+from the book ["Hypermedia Systems"](https://hypermedia.systems/).
 ---
 
 ### Note

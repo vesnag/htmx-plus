@@ -1,6 +1,6 @@
 name: HTMX Plus Web 1.0 Application
 type: module
-description: 'HTMX Plus Web 1.0 Application from the book "HTMX Plus: High Power AJAX for Modern Web Applications"'
+description: 'HTMX Plus Web 1.0 Application from the book "Hypermedia Systems"'
 package: Custom
 core_version_requirement: "^10 || ^11"
 dependencies:
