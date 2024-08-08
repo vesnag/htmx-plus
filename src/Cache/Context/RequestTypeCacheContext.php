@@ -27,7 +27,7 @@ class RequestTypeCacheContext implements CacheContextInterface {
    * {@inheritdoc}
    */
   public static function getLabel() {
-    return t('Request type');
+    return (string) t('Request type');
   }
 
   /**
