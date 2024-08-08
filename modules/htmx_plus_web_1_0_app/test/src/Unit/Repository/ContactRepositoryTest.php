@@ -10,35 +10,28 @@ use Drupal\Core\Database\StatementInterface;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\htmx_plus_web_1_0_app\Model\ContactData;
-use Drupal\htmx_plus_web_1_0_app\Service\ContactService;
+use Drupal\htmx_plus_web_1_0_app\Repository\ContactRepository;
 use Drupal\htmx_plus_web_1_0_app\Test\Mocks\DatabaseQueryMock;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Drupal\htmx_plus_web_1_0_app\Service\ContactService
+ * @coversDefaultClass \Drupal\htmx_plus_web_1_0_app\Repository\ContactRepository
  */
-class ContactServiceTest extends TestCase {
+class ContactRepositoryTest extends TestCase {
 
   /**
    * The database connection.
    *
    * @var \Drupal\Core\Database\Connection|\PHPUnit\Framework\MockObject\MockObject
    */
-  protected $database;
+  private $database;
 
   /**
-   * The entity type manager.
+   * The contact repository.
    *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+   * @var \Drupal\htmx_plus_web_1_0_app\Repository\ContactRepository
    */
-  protected $entityTypeManager;
-
-  /**
-   * The contact service.
-   *
-   * @var \Drupal\htmx_plus_web_1_0_app\Service\ContactService
-   */
-  protected $contactService;
+  private $contactRepository;
 
   /**
    * {@inheritdoc}
@@ -48,7 +41,7 @@ class ContactServiceTest extends TestCase {
 
     $this->database = $this->createMock(Connection::class);
     $entityTypeManager = $this->createMock(EntityTypeManagerInterface::class);
-    $this->contactService = new ContactService($this->database, $entityTypeManager);
+    $this->contactRepository = new ContactRepository($this->database, $entityTypeManager);
 
     $container = new ContainerBuilder();
     $container->set('database', $this->database);
@@ -93,7 +86,7 @@ class ContactServiceTest extends TestCase {
       ->method('fetchAll')
       ->willReturn($result);
 
-    $contacts = $this->contactService->search($search);
+    $contacts = $this->contactRepository->search($search);
 
     $this->assertEquals($result, $contacts, 'The search result should match the expected result');
   }
@@ -125,7 +118,7 @@ class ContactServiceTest extends TestCase {
     $insertQuery->expects($this->once())
       ->method('execute');
 
-    $this->contactService->saveContact($contactData);
+    $this->contactRepository->saveContact($contactData);
 
     $this->assertTrue(TRUE);
   }
@@ -156,7 +149,7 @@ class ContactServiceTest extends TestCase {
       ->method('fetchAll')
       ->willReturn($result);
 
-    $contacts = $this->contactService->all();
+    $contacts = $this->contactRepository->all();
 
     $this->assertEquals($result, $contacts);
   }
@@ -193,7 +186,7 @@ class ContactServiceTest extends TestCase {
       ->method('fetchAssoc')
       ->willReturn($result);
 
-    $contact = $this->contactService->getContactById($contact_id);
+    $contact = $this->contactRepository->getContactById($contact_id);
 
     $expectedContact = new ContactData(
       $result['name'],
@@ -238,7 +231,7 @@ class ContactServiceTest extends TestCase {
     $updateQuery->expects($this->once())
       ->method('execute');
 
-    $this->contactService->updateContact($contactData);
+    $this->contactRepository->updateContact($contactData);
   }
 
   /**
@@ -264,7 +257,7 @@ class ContactServiceTest extends TestCase {
     $deleteQuery->expects($this->once())
       ->method('execute');
 
-    $this->contactService->deleteContact($contact_id);
+    $this->contactRepository->deleteContact($contact_id);
   }
 
 }

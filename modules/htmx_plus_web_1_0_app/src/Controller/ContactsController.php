@@ -7,8 +7,8 @@ namespace Drupal\htmx_plus_web_1_0_app\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
 use Drupal\htmx_plus\Service\RequestParameterService;
+use Drupal\htmx_plus_web_1_0_app\Repository\ContactRepository;
 use Drupal\htmx_plus_web_1_0_app\Service\ContactDataExtractor;
-use Drupal\htmx_plus_web_1_0_app\Service\ContactService;
 use Drupal\htmx_plus_web_1_0_app\Service\ContactsRenderer;
 use Drupal\htmx_plus_web_1_0_app\Service\PostRequestValidator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -28,8 +28,8 @@ class ContactsController extends ControllerBase {
   /**
    * Constructs a ContactsController object.
    *
-   * @param \Drupal\htmx_plus_web_1_0_app\Service\ContactService $contactService
-   *   The contact service.
+   * @param \Drupal\htmx_plus_web_1_0_app\Repository\ContactRepository $contactRepository
+   *   The contact repository.
    * @param \Drupal\htmx_plus_web_1_0_app\Service\ContactDataExtractor $contactDataExtractor
    *   The contact data extractor.
    * @param \Drupal\htmx_plus_web_1_0_app\Service\PostRequestValidator $postRequestValidator
@@ -40,7 +40,7 @@ class ContactsController extends ControllerBase {
    *   The request parameter service.
    */
   public function __construct(
-    private ContactService $contactService,
+    private ContactRepository $contactRepository,
     private ContactDataExtractor $contactDataExtractor,
     private PostRequestValidator $postRequestValidator,
     private ContactsRenderer $contactsRenderer,
@@ -85,7 +85,7 @@ class ContactsController extends ControllerBase {
     $validationResult = $this->postRequestValidator->validateContactData($contactData);
 
     if (!$validationResult->hasErrors()) {
-      $this->contactService->saveContact($contactData);
+      $this->contactRepository->saveContact($contactData);
 
       $url = Url::fromRoute('htmx_plus_web_1_0_app.contacts')->toString();
       return new RedirectResponse($url);
@@ -110,7 +110,7 @@ class ContactsController extends ControllerBase {
    * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
    */
   public function show(string $contact_id): array {
-    $contact = $this->contactService->getContactById($contact_id);
+    $contact = $this->contactRepository->getContactById($contact_id);
 
     if (NULL === $contact) {
       throw new NotFoundHttpException();
@@ -148,7 +148,7 @@ class ContactsController extends ControllerBase {
         ];
       }
 
-      $this->contactService->updateContact($contactData);
+      $this->contactRepository->updateContact($contactData);
 
       $url = Url::fromRoute('htmx_plus_web_1_0_app.contact_show', [
         'contact_id' => $contact_id,
@@ -156,7 +156,7 @@ class ContactsController extends ControllerBase {
       return new RedirectResponse($url);
     }
 
-    $contact = $this->contactService->getContactById($contact_id);
+    $contact = $this->contactRepository->getContactById($contact_id);
 
     if (NULL === $contact) {
       throw new NotFoundHttpException();
@@ -185,14 +185,14 @@ class ContactsController extends ControllerBase {
       throw new MethodNotAllowedHttpException(['POST'], 'Method Not Allowed');
     }
 
-    $contact = $this->contactService->getContactById($contact_id);
+    $contact = $this->contactRepository->getContactById($contact_id);
 
     if (NULL === $contact) {
       throw new NotFoundHttpException();
     }
 
     if (TRUE === $request->isMethod('post')) {
-      $this->contactService->deleteContact($contact_id);
+      $this->contactRepository->deleteContact($contact_id);
 
       $url = Url::fromRoute('htmx_plus_web_1_0_app.contacts')->toString();
       return new RedirectResponse($url);
@@ -209,7 +209,7 @@ class ContactsController extends ControllerBase {
    *   A render array.
    */
   public function builContactList(Request $request): Response|array {
-    $contacts = $this->contactService->all();
+    $contacts = $this->contactRepository->all();
 
     return $this->contactsRenderer->renderContactsList($request, $contacts);
   }
@@ -219,7 +219,7 @@ class ContactsController extends ControllerBase {
    */
   public static function create(ContainerInterface $container): self {
     return new static(
-      $container->get('htmx_plus_web_1_0_app.contact_service'),
+      $container->get('htmx_plus_web_1_0_app.contact_repository'),
       $container->get('htmx_plus_web_1_0_app.contact_data_extractor'),
       $container->get('htmx_plus_web_1_0_app.post_request_validator'),
       $container->get('htmx_plus_web_1_0_app.contacts_renderer'),
@@ -237,10 +237,10 @@ class ContactsController extends ControllerBase {
     $search = $this->requestParameterService->getRequestParameter($request, 'q');
 
     if ('' !== $search) {
-      return $this->contactService->search($search);
+      return $this->contactRepository->search($search);
     }
 
-    return $this->contactService->all();
+    return $this->contactRepository->all();
 
   }
 

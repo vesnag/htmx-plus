@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Drupal\htmx_plus_web_1_0_app\Service;
+namespace Drupal\htmx_plus_web_1_0_app\Repository;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\htmx_plus_web_1_0_app\Model\ContactData;
 
 /**
- * Service for handling contacts.
+ * Repository for handling contacts.
  */
-class ContactService {
+class ContactRepository {
 
   /**
    * The database connection.
