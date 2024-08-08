@@ -12,13 +12,20 @@ use Drupal\Core\Form\FormStateInterface;
 class SettingsForm extends StateFormBase {
 
   /**
+   * Config settings.
+   */
+  const CONFIG_NAME = 'htmx_plus.settings';
+
+  /**
    * {@inheritdoc}
    *
    * @return string[]
    *   An array of configuration object names.
    */
   protected function getEditableConfigNames(): array {
-    return ['htmx_plus.settings'];
+    return [
+      static::CONFIG_NAME,
+    ];
   }
 
   /**
