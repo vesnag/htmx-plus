@@ -16,6 +16,7 @@ function htmx_plus_web_1_0_app_theme(): array {
     'contacts_page' => [
       'variables' => [
         'contacts' => [],
+        'search_query' => [],
       ],
     ],
     'contacts_new' => [

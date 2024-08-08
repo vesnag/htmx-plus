@@ -18,6 +18,9 @@ services:
   htmx_plus.htmx_request_checker:
     class: Drupal\htmx_plus\Service\HtmxRequestChecker
 
+  htmx_plus.request_parameters_service:
+    class: Drupal\htmx_plus\Service\RequestParameterService
+
   htmx_plus.debug_library_subscriber:
     class: Drupal\htmx_plus\EventSubscriber\HtmxDebugLibrarySubscriber
     arguments: ['@htmx_plus.config_service']

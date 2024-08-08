@@ -34,6 +34,7 @@ final class ContactsRenderer {
     $render_array = [
       '#theme' => 'contacts_page',
       '#contacts' => $contacts,
+      '#search_query' => (string) $request->query->get('q', $request->request->get('q', '')),
       '#cache' => [
         'contexts' => ['request_type'],
       ],

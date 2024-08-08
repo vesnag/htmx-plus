@@ -6,6 +6,7 @@ namespace Drupal\htmx_plus_web_1_0_app\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
+use Drupal\htmx_plus\Service\RequestParameterService;
 use Drupal\htmx_plus_web_1_0_app\Service\ContactDataExtractor;
 use Drupal\htmx_plus_web_1_0_app\Service\ContactService;
 use Drupal\htmx_plus_web_1_0_app\Service\ContactsRenderer;
@@ -35,12 +36,15 @@ class ContactsController extends ControllerBase {
    *   The post request validator.
    * @param \Drupal\htmx_plus_web_1_0_app\Service\ContactsRenderer $contactsRenderer
    *   The contacts renderer.
+   * @param \Drupal\htmx_plus\Service\RequestParameterService $requestParameterService
+   *   The request parameter service.
    */
   public function __construct(
     private ContactService $contactService,
     private ContactDataExtractor $contactDataExtractor,
     private PostRequestValidator $postRequestValidator,
     private ContactsRenderer $contactsRenderer,
+    private RequestParameterService $requestParameterService,
   ) {
   }
 
@@ -219,6 +223,7 @@ class ContactsController extends ControllerBase {
       $container->get('htmx_plus_web_1_0_app.contact_data_extractor'),
       $container->get('htmx_plus_web_1_0_app.post_request_validator'),
       $container->get('htmx_plus_web_1_0_app.contacts_renderer'),
+      $container->get('htmx_plus.request_parameters_service'),
     );
   }
 
@@ -229,7 +234,8 @@ class ContactsController extends ControllerBase {
    *   The contacts set.
    */
   private function getContacts(Request $request): array {
-    $search = (string) $request->query->get('q');
+    $search = $this->requestParameterService->getRequestParameter($request, 'q');
+
     if ('' !== $search) {
       return $this->contactService->search($search);
     }
