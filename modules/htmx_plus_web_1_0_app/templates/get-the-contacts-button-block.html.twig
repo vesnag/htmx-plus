@@ -1,6 +1,6 @@
 <div id="main-contacts">
   <button {{ hx_attributes({
-    'get': '/get-contacts',
+    'get': '/contacts/list',
     'target': '#main-contacts',
     'swap': 'outerHTML',
     'trigger': 'click, keyup[ctrlKey && key == \'l\'] from:body',

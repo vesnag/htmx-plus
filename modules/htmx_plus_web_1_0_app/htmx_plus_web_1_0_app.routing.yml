@@ -5,8 +5,8 @@ htmx_plus_web_1_0_app.contacts:
   requirements:
     _permission: 'access content'
 
-htmx_plus_web_1_0_app.get_contacts:
-  path: '/get-contacts'
+htmx_plus_web_1_0_app.contacts_list:
+  path: '/contacts/list'
   defaults:
     _controller: '\Drupal\htmx_plus_web_1_0_app\Controller\ContactsController::builContactList'
   requirements:

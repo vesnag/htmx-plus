@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * Controller for the Contacts page.
@@ -57,6 +58,7 @@ class ContactsController extends ControllerBase {
    * @return array<string,mixed>|\Symfony\Component\HttpFoundation\Response
    *   A render array.
    */
+  #[Route('/contacts', name: 'contacts')]
   public function contacts(Request $request): Response|array {
     $contacts = $this->getContacts($request);
 
@@ -72,6 +74,7 @@ class ContactsController extends ControllerBase {
    * @return array<string,mixed>|\Symfony\Component\HttpFoundation\RedirectResponse
    *   A render array or a redirect response.
    */
+  #[Route('/contacts/new', name: 'contacts_new')]
   public function new(Request $request): array|RedirectResponse {
     if (FALSE === $request->isMethod('post')) {
       return [
@@ -109,6 +112,7 @@ class ContactsController extends ControllerBase {
    *
    * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
    */
+  #[Route('/contacts/{contact_id}', name: 'contact_show')]
   public function show(string $contact_id): array {
     $contact = $this->contactRepository->getContactById($contact_id);
 
@@ -133,6 +137,7 @@ class ContactsController extends ControllerBase {
    * @return array<string,mixed>|\Symfony\Component\HttpFoundation\RedirectResponse
    *   A render array or a redirect response.
    */
+  #[Route('/contacts/{contact_id}/edit', name: 'contact_edit')]
   public function edit(string $contact_id, Request $request): array|RedirectResponse {
     if (TRUE === $request->isMethod('post')) {
       $contactData = $this->contactDataExtractor->getContactDataFromPostRequest($request);
@@ -180,6 +185,7 @@ class ContactsController extends ControllerBase {
    * @return array<string, mixed>|\Symfony\Component\HttpFoundation\RedirectResponse
    *   A render array or a redirect response.
    */
+  #[Route('/contacts/{contact_id}/delete', name: 'contact_delete')]
   public function delete(string $contact_id, Request $request): array|RedirectResponse {
     if (FALSE === $request->isMethod('post')) {
       throw new MethodNotAllowedHttpException(['POST'], 'Method Not Allowed');
@@ -208,6 +214,7 @@ class ContactsController extends ControllerBase {
    * @return array<string,mixed>|\Symfony\Component\HttpFoundation\Response
    *   A render array.
    */
+  #[Route('/contacts/list', name: 'contacts_list')]
   public function builContactList(Request $request): Response|array {
     $contacts = $this->contactRepository->all();
 
