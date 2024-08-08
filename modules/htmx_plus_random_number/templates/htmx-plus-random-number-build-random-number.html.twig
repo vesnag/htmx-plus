@@ -1,9 +1,9 @@
 <button {{ hx_attributes({
-  get: '/get-random-number',
-  trigger: 'click',
-  target: '#random-number-result',
-  swap: 'innerHTML',
-  ext: 'debug',
+  'get': '/get-random-number',
+  'trigger': 'click',
+  'target': '#random-number-result',
+  'swap': 'innerHTML',
+  'ext': 'debug',
   }) }}>{{ button_text }} with HTMX</button>
 
 <div id="random-number-result"></div>
