@@ -31,7 +31,7 @@ final class ContactsRenderer {
    *   A render array or a response object.
    */
   public function renderContactPage(Request $request, array $contacts): Response|array {
-    $render_array = [
+    return [
       '#theme' => 'contacts_page',
       '#contacts' => $contacts,
       '#search_query' => (string) $request->query->get('q', $request->request->get('q', '')),
@@ -39,13 +39,6 @@ final class ContactsRenderer {
         'contexts' => ['request_type'],
       ],
     ];
-
-    if (TRUE === $this->htmxRequestChecker->isHtmxRequest($request)) {
-      $html_content = $this->renderer->render($render_array)->__toString();
-      return new Response($html_content);
-    }
-
-    return $render_array;
   }
 
   /**
