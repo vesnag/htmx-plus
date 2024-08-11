@@ -11,8 +11,8 @@
   <div><small>Click the button or press Ctrl+L to load contacts.</small></div>
 </div>
 
-<!-- Description -->
-<!--
+{#
+Description:
 In this example, the `hx-trigger` attribute has been added to the button to listen for two types of events:
 1. **Click events**: A request will be sent when the button is clicked.
 2. **Keyup events** on the `body` element: A request will also be triggered whenever the `Ctrl+L` keys are pressed anywhere on the page.
@@ -22,4 +22,4 @@ This is achieved by using the `hx-trigger` attribute to specify the events:
 - `keyup[ctrlKey && key == 'l'] from:body`: Listens for the `Ctrl+L` key combination, specifically on the `body` element.
 
 By listening for the `keyup` event on the `body` tag, the button is made responsive not only to direct clicks but also to specific keyboard interactions within the entire body of the page.
--->
+#}
