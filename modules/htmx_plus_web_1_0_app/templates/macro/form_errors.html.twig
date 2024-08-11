@@ -1,9 +1,13 @@
 {% macro displayError(validationResult, field) %}
-  {% if validationResult.hasErrors() %}
-    {% for error in validationResult.getErrors() %}
-      {% if error.getField() == field %}
-        <span class="error">{{ error.getMessage() }}</span>
-     {% endif %}
-   {% endfor %}
- {% endif %}
+    {% set errorMessage = '' %}
+    {% if validationResult.hasErrors() %}
+        {% set found = false %}
+        {% for error in validationResult.getErrors() %}
+            {% if error.getField() == field and not found %}
+                {% set errorMessage = error.getMessage() %}
+                {% set found = true %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    <span class="error">{{ errorMessage }}</span>
 {% endmacro %}

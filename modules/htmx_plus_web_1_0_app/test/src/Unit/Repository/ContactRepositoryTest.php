@@ -8,7 +8,6 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Database\StatementInterface;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\htmx_plus_web_1_0_app\Model\ContactData;
 use Drupal\htmx_plus_web_1_0_app\Repository\ContactRepository;
 use Drupal\htmx_plus_web_1_0_app\Test\Mocks\DatabaseQueryMock;
@@ -40,8 +39,7 @@ class ContactRepositoryTest extends TestCase {
     parent::setUp();
 
     $this->database = $this->createMock(Connection::class);
-    $entityTypeManager = $this->createMock(EntityTypeManagerInterface::class);
-    $this->contactRepository = new ContactRepository($this->database, $entityTypeManager);
+    $this->contactRepository = new ContactRepository($this->database);
 
     $container = new ContainerBuilder();
     $container->set('database', $this->database);

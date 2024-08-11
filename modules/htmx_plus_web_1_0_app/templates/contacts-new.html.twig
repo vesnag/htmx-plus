@@ -12,9 +12,10 @@
     <p>
       <label for="email">Email</label>
       <input name="email" id="email" type="email" placeholder="Email" value="{{ contact.email }}" {{ hx_attributes({
-      get: '/contacts/' ~ {{ contact.id }} ~ '/email',
-      target: 'next .error'
-      }) }}>
+get: '/contacts/validate-email',
+target: 'next .error',
+triger: 'change, keyup delay:200ms changed',
+}) }}>
       {{ formErrors.displayError(validationResult, 'email') }}
     </p>
     <p>

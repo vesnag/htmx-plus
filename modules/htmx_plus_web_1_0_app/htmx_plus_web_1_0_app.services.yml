@@ -1,7 +1,7 @@
 services:
   htmx_plus_web_1_0_app.contact_repository:
     class: Drupal\htmx_plus_web_1_0_app\Repository\ContactRepository
-    arguments: ['@database', '@entity_type.manager']
+    arguments: ['@database']
 
   htmx_plus_web_1_0_app.contact_data_validator:
     class: Drupal\htmx_plus_web_1_0_app\Service\ContactDataValidator

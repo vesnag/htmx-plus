@@ -46,7 +46,7 @@ htmx_plus_web_1_0_app.contact_delete:
   methods: [POST]
 
 htmx_plus_web_1_0_app.validate_email:
-  path: '/contacts/{contact_id}/email'
+  path: '/contacts/validate-email'
   defaults:
     _controller: '\Drupal\htmx_plus_web_1_0_app\Controller\EmailValidationController::validateEmail'
   requirements:

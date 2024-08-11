@@ -33,15 +33,13 @@ class EmailValidationController extends ControllerBase {
   /**
    * Validate an email address.
    *
-   * @param string $contact_id
-   *   The contact ID.
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   The request.
    *
    * @return \Symfony\Component\HttpFoundation\Response
    *   The response.
    */
-  public function validateEmail(string $contact_id, Request $request): Response {
+  public function validateEmail(Request $request): Response {
     $email = (string) $request->query->get('email');
     $error_message = $this->emailValidationService->validateEmail($email);
 

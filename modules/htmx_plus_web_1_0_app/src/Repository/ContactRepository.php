@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\htmx_plus_web_1_0_app\Repository;
 
 use Drupal\Core\Database\Connection;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\htmx_plus_web_1_0_app\Model\ContactData;
 
 /**
@@ -18,12 +17,9 @@ class ContactRepository {
    *
    * @param \Drupal\Core\Database\Connection $database
    *   The database connection.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
    */
   public function __construct(
     private Connection $database,
-    private EntityTypeManagerInterface $entityTypeManager,
   ) {}
 
   /**
@@ -91,7 +87,7 @@ class ContactRepository {
   public function getContactById(string $contact_id): ?ContactData {
     $query = $this->database->select('contacts', 'c')
       ->fields('c', ['id', 'name', 'email', 'phone'])
-      ->condition('id', $contact_id);
+      ->condition('id', $this->database->escapeLike($contact_id));
 
     /** @var \Drupal\Core\Database\StatementInterface|array[] $statement */
     $statement = $query->execute();
@@ -143,8 +139,8 @@ class ContactRepository {
    */
   public function doesEmailExist(string $email): bool {
     $query = $this->database->select('contacts', 'c')
-      ->fields('c', ['id'])
-      ->condition('email', $email);
+      ->fields('c', ['email'])
+      ->condition('email', $this->database->escapeLike($email));
 
     /** @var \Drupal\Core\Database\StatementInterface|array[] $statement */
     $statement = $query->execute();
