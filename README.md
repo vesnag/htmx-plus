@@ -26,6 +26,24 @@ You can enable debug mode with `drush htmx:debug on` and disable it with
 - **HTMX Plus Web 1.0 App:**
 The `htmx_plus_web_1_0_app` submodule provides the HTMX Plus Web 1.0 Application
 from the book ["Hypermedia Systems"](https://hypermedia.systems/).
+
+## Code Standards and Static Analysis
+- **PHPStan:**
+PHPStan is used for static analysis with the highest level of strictness.
+```sh
+phpstan --level max
+```
+
+- **Twig Linter:**
+Twig templates are linted using ["Twig-CS-Fixer"](https://github.com/VincentLanglet/Twig-CS-Fixer).
+
+
+- **PHPCS:**
+PHP CodeSniffer is used with the Drupal and DrupalPractice standards.
+```sh
+phpcs --standard=Drupal,DrupalPractice
+```
+
 ---
 
 ### Note
