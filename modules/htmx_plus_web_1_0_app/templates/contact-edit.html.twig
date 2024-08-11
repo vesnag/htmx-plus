@@ -23,9 +23,12 @@
   </div>
 </form>
 
-<form action="/contacts/{{ contact.id }}/delete" method="post">
-    <button>Delete Contact</button>
-</form>
+<button {{ hx_attributes({
+  delete: '/contacts/' ~ contact.id ~ '/edit',
+  target: 'body',
+  'push-url': 'true',
+  confirm: 'Are you sure you want to delete this contact?',
+  }) }}>Delete Contact</button>
 
 <p>
   <a href="/contacts/{{ contact.id }}">Back to Contact</a>

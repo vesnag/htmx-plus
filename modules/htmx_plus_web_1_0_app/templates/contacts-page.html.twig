@@ -1,7 +1,5 @@
 <nav>
-    <ul  {{ hx_attributes({
-        'hx-boost': 'true',
-    }) }}>
+    <ul {{ hx_attributes({boost: 'true'}) }}>
         <li><a href="/contacts">Load entire page with HTMX</a></li>
         <li><a href="/settings">Settings</a></li>
         <li><a href="/help">Help</a></li>

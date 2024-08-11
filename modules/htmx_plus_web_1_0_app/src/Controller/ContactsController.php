@@ -7,6 +7,7 @@ namespace Drupal\htmx_plus_web_1_0_app\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
 use Drupal\htmx_plus\Service\RequestParameterService;
+use Drupal\htmx_plus_web_1_0_app\Handler\ContactEditRequestHandler;
 use Drupal\htmx_plus_web_1_0_app\Repository\ContactRepository;
 use Drupal\htmx_plus_web_1_0_app\Service\ContactDataExtractor;
 use Drupal\htmx_plus_web_1_0_app\Service\ContactsRenderer;
@@ -39,6 +40,8 @@ class ContactsController extends ControllerBase {
    *   The contacts renderer.
    * @param \Drupal\htmx_plus\Service\RequestParameterService $requestParameterService
    *   The request parameter service.
+   * @param \Drupal\htmx_plus_web_1_0_app\Handler\ContactEditRequestHandler $contactEditRequestHandler
+   *   The contact edit request handler.
    */
   public function __construct(
     private ContactRepository $contactRepository,
@@ -46,6 +49,7 @@ class ContactsController extends ControllerBase {
     private PostRequestValidator $postRequestValidator,
     private ContactsRenderer $contactsRenderer,
     private RequestParameterService $requestParameterService,
+    private ContactEditRequestHandler $contactEditRequestHandler,
   ) {
   }
 
@@ -76,7 +80,7 @@ class ContactsController extends ControllerBase {
    */
   #[Route('/contacts/new', name: 'contacts_new')]
   public function new(Request $request): array|RedirectResponse {
-    if (FALSE === $request->isMethod('post')) {
+    if ('POST' !== $request->getMethod()) {
       return [
         '#theme' => 'contacts_new',
         '#contact' => [],
@@ -139,39 +143,19 @@ class ContactsController extends ControllerBase {
    */
   #[Route('/contacts/{contact_id}/edit', name: 'contact_edit')]
   public function edit(string $contact_id, Request $request): array|RedirectResponse {
-    if (TRUE === $request->isMethod('post')) {
-      $contactData = $this->contactDataExtractor->getContactDataFromPostRequest($request);
-      $contactData->setId($contact_id);
-
-      $validationResult = $this->postRequestValidator->validateContactData($contactData);
-
-      if ($validationResult->hasErrors()) {
-        return [
-          '#theme' => 'contact_edit',
-          '#contact' => $contactData,
-          '#validationResult' => $validationResult,
-        ];
-      }
-
-      $this->contactRepository->updateContact($contactData);
-
-      $url = Url::fromRoute('htmx_plus_web_1_0_app.contact_show', [
-        'contact_id' => $contact_id,
-      ])->toString();
-      return new RedirectResponse($url);
+    if (!in_array($request->getMethod(), ['GET', 'POST', 'DELETE'])) {
+      throw new MethodNotAllowedHttpException(['GET', 'POST', 'DELETE'], 'Method Not Allowed');
     }
 
-    $contact = $this->contactRepository->getContactById($contact_id);
-
-    if (NULL === $contact) {
-      throw new NotFoundHttpException();
+    if ('POST' === $request->getMethod()) {
+      return $this->contactEditRequestHandler->handlePost($contact_id, $request);
     }
 
-    return [
-      '#theme' => 'contact_edit',
-      '#contact' => $contact,
-      '#validationResult' => [],
-    ];
+    if ('DELETE' === $request->getMethod()) {
+      return $this->contactEditRequestHandler->handleDelete($contact_id);
+    }
+
+    return $this->contactEditRequestHandler->handleGet($contact_id);
   }
 
   /**
@@ -187,22 +171,19 @@ class ContactsController extends ControllerBase {
    */
   #[Route('/contacts/{contact_id}/delete', name: 'contact_delete')]
   public function delete(string $contact_id, Request $request): array|RedirectResponse {
-    if (FALSE === $request->isMethod('post')) {
+    if ('POST' !== $request->getMethod()) {
       throw new MethodNotAllowedHttpException(['POST'], 'Method Not Allowed');
     }
 
     $contact = $this->contactRepository->getContactById($contact_id);
-
     if (NULL === $contact) {
       throw new NotFoundHttpException();
     }
 
-    if (TRUE === $request->isMethod('post')) {
-      $this->contactRepository->deleteContact($contact_id);
+    $this->contactRepository->deleteContact($contact_id);
 
-      $url = Url::fromRoute('htmx_plus_web_1_0_app.contacts')->toString();
-      return new RedirectResponse($url);
-    }
+    $url = Url::fromRoute('htmx_plus_web_1_0_app.contacts')->toString();
+    return new RedirectResponse($url);
   }
 
   /**
@@ -231,6 +212,7 @@ class ContactsController extends ControllerBase {
       $container->get('htmx_plus_web_1_0_app.post_request_validator'),
       $container->get('htmx_plus_web_1_0_app.contacts_renderer'),
       $container->get('htmx_plus.request_parameters_service'),
+      $container->get('htmx_plus_web_1_0_app.contact_edit_request_handler'),
     );
   }
 

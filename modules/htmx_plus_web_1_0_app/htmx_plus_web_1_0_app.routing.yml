@@ -38,13 +38,14 @@ htmx_plus_web_1_0_app.contact_edit:
   requirements:
     _permission: 'access content'
     contact_id: '\d+'
-  methods: [GET, POST]
+  methods: [GET, POST, DELETE]
 
+# # Temporary route for HTTP request example, to be removed in the future.
 htmx_plus_web_1_0_app.contact_delete:
   path: '/contacts/{contact_id}/delete'
   defaults:
     _controller: '\Drupal\htmx_plus_web_1_0_app\Controller\ContactsController::delete'
   requirements:
-    _permission: 'delete contacts'
+    _permission: 'access content'
     contact_id: '\d+'
   methods: [POST]

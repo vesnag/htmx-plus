@@ -1,7 +1,4 @@
 services:
-  Drupal\htmx_plus_web_1_0_app\Controller\ContactsController:
-    arguments: ['@htmx_plus_web_1_0_app.contact_data_extractor', '@htmx_plus_web_1_0_app.post_request_validator']
-
   htmx_plus_web_1_0_app.contact_repository:
     class: Drupal\htmx_plus_web_1_0_app\Repository\ContactRepository
     arguments: ['@database', '@entity_type.manager', '@htmx_plus_web_1_0_app.post_request_validator', '@htmx_plus_web_1_0_app.contact_data_extractor']
@@ -15,3 +12,27 @@ services:
   htmx_plus_web_1_0_app.contacts_renderer:
     class: Drupal\htmx_plus_web_1_0_app\Service\ContactsRenderer
     arguments: ['@htmx_plus.htmx_request_checker', '@renderer']
+
+  htmx_plus_web_1_0_app.get_contact_handler:
+    class: Drupal\htmx_plus_web_1_0_app\Handler\GetContactHandler
+    arguments: ['@htmx_plus_web_1_0_app.contact_repository']
+
+  htmx_plus_web_1_0_app.post_contact_handler:
+    class: Drupal\htmx_plus_web_1_0_app\Handler\PostContactHandler
+    arguments: [
+      '@htmx_plus_web_1_0_app.contact_repository',
+      '@htmx_plus_web_1_0_app.contact_data_extractor',
+      '@htmx_plus_web_1_0_app.post_request_validator'
+    ]
+
+  htmx_plus_web_1_0_app.delete_contact_handler:
+    class: Drupal\htmx_plus_web_1_0_app\Handler\DeleteContactHandler
+    arguments: ['@htmx_plus_web_1_0_app.contact_repository', '@messenger']
+
+  htmx_plus_web_1_0_app.contact_edit_request_handler:
+    class: Drupal\htmx_plus_web_1_0_app\Handler\ContactEditRequestHandler
+    arguments: [
+      '@htmx_plus_web_1_0_app.get_contact_handler',
+      '@htmx_plus_web_1_0_app.post_contact_handler',
+      '@htmx_plus_web_1_0_app.delete_contact_handler'
+    ]
