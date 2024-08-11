@@ -45,16 +45,16 @@
 
 <hr>
 
-<h2>XHTML Approach</h2>
+<h2>HTMX Approach</h2>
 
-<form id="xhtml-search-form" action="/contacts" method="get">
+<form id="htmx-search-form" action="/contacts" method="get">
     <label for="hx-search">Search Term</label>
     <input id="hx-search" type="search" name="q" value="{{ search_query }}" placeholder="Search Contacts"/>
     <button {{ hx_attributes({
         post: '/contacts',
         target: '#block-drupal-tailwind-content',
         include: '#hx-search',
-        vals: '{"type":"xhtml-search-form", "state":"MT"}'
+        vals: '{"type":"htmx-search-form", "state":"MT"}'
         }) }}>Search</button>
 </form>
 
