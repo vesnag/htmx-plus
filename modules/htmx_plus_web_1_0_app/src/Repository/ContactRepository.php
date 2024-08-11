@@ -14,31 +14,17 @@ use Drupal\htmx_plus_web_1_0_app\Model\ContactData;
 class ContactRepository {
 
   /**
-   * The database connection.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $database;
-
-  /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
    * Constructs a ContactService object.
    *
    * @param \Drupal\Core\Database\Connection $database
    *   The database connection.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
    */
-  public function __construct(Connection $database, EntityTypeManagerInterface $entity_type_manager) {
-    $this->database = $database;
-    $this->entityTypeManager = $entity_type_manager;
-  }
+  public function __construct(
+    private Connection $database,
+    private EntityTypeManagerInterface $entityTypeManager,
+  ) {}
 
   /**
    * Searches for contacts based on criteria.
@@ -121,7 +107,6 @@ class ContactRepository {
       $contact['phone'],
       (string) $contact['id']
       ) : NULL;
-
   }
 
   /**
@@ -148,6 +133,23 @@ class ContactRepository {
     $this->database->delete('contacts')
       ->condition('id', $contact_id)
       ->execute();
+  }
+
+  /**
+   * Checks if an email exists in the contacts table.
+   *
+   * @param string $email
+   *   The email address to check.
+   */
+  public function doesEmailExist(string $email): bool {
+    $query = $this->database->select('contacts', 'c')
+      ->fields('c', ['id'])
+      ->condition('email', $email);
+
+    /** @var \Drupal\Core\Database\StatementInterface|array[] $statement */
+    $statement = $query->execute();
+
+    return (bool) $statement->fetchField();
   }
 
 }

@@ -10,8 +10,8 @@ use Drupal\htmx_plus\Service\RequestParameterService;
 use Drupal\htmx_plus_web_1_0_app\Handler\ContactEditRequestHandler;
 use Drupal\htmx_plus_web_1_0_app\Repository\ContactRepository;
 use Drupal\htmx_plus_web_1_0_app\Service\ContactDataExtractor;
+use Drupal\htmx_plus_web_1_0_app\Service\ContactDataValidator;
 use Drupal\htmx_plus_web_1_0_app\Service\ContactsRenderer;
-use Drupal\htmx_plus_web_1_0_app\Service\PostRequestValidator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,8 +34,8 @@ class ContactsController extends ControllerBase {
    *   The contact repository.
    * @param \Drupal\htmx_plus_web_1_0_app\Service\ContactDataExtractor $contactDataExtractor
    *   The contact data extractor.
-   * @param \Drupal\htmx_plus_web_1_0_app\Service\PostRequestValidator $postRequestValidator
-   *   The post request validator.
+   * @param \Drupal\htmx_plus_web_1_0_app\Service\ContactDataValidator $contactDataValidator
+   *   The contact data validator.
    * @param \Drupal\htmx_plus_web_1_0_app\Service\ContactsRenderer $contactsRenderer
    *   The contacts renderer.
    * @param \Drupal\htmx_plus\Service\RequestParameterService $requestParameterService
@@ -46,11 +46,25 @@ class ContactsController extends ControllerBase {
   public function __construct(
     private ContactRepository $contactRepository,
     private ContactDataExtractor $contactDataExtractor,
-    private PostRequestValidator $postRequestValidator,
+    private ContactDataValidator $contactDataValidator,
     private ContactsRenderer $contactsRenderer,
     private RequestParameterService $requestParameterService,
     private ContactEditRequestHandler $contactEditRequestHandler,
   ) {
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container): self {
+    return new static(
+      $container->get('htmx_plus_web_1_0_app.contact_repository'),
+      $container->get('htmx_plus_web_1_0_app.contact_data_extractor'),
+      $container->get('htmx_plus_web_1_0_app.contact_data_validator'),
+      $container->get('htmx_plus_web_1_0_app.contacts_renderer'),
+      $container->get('htmx_plus.request_parameters_service'),
+      $container->get('htmx_plus_web_1_0_app.contact_edit_request_handler'),
+    );
   }
 
   /**
@@ -89,7 +103,7 @@ class ContactsController extends ControllerBase {
     }
 
     $contactData = $this->contactDataExtractor->getContactDataFromPostRequest($request);
-    $validationResult = $this->postRequestValidator->validateContactData($contactData);
+    $validationResult = $this->contactDataValidator->validateContactData($contactData);
 
     if (!$validationResult->hasErrors()) {
       $this->contactRepository->saveContact($contactData);
@@ -200,20 +214,6 @@ class ContactsController extends ControllerBase {
     $contacts = $this->contactRepository->all();
 
     return $this->contactsRenderer->renderContactsList($request, $contacts);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('htmx_plus_web_1_0_app.contact_repository'),
-      $container->get('htmx_plus_web_1_0_app.contact_data_extractor'),
-      $container->get('htmx_plus_web_1_0_app.post_request_validator'),
-      $container->get('htmx_plus_web_1_0_app.contacts_renderer'),
-      $container->get('htmx_plus.request_parameters_service'),
-      $container->get('htmx_plus_web_1_0_app.contact_edit_request_handler'),
-    );
   }
 
   /**

@@ -1,10 +1,11 @@
 services:
   htmx_plus_web_1_0_app.contact_repository:
     class: Drupal\htmx_plus_web_1_0_app\Repository\ContactRepository
-    arguments: ['@database', '@entity_type.manager', '@htmx_plus_web_1_0_app.post_request_validator', '@htmx_plus_web_1_0_app.contact_data_extractor']
+    arguments: ['@database', '@entity_type.manager']
 
-  htmx_plus_web_1_0_app.post_request_validator:
-    class: Drupal\htmx_plus_web_1_0_app\Service\PostRequestValidator
+  htmx_plus_web_1_0_app.contact_data_validator:
+    class: Drupal\htmx_plus_web_1_0_app\Service\ContactDataValidator
+    arguments: ['@htmx_plus_web_1_0_app.email_validation_service']
 
   htmx_plus_web_1_0_app.contact_data_extractor:
     class: Drupal\htmx_plus_web_1_0_app\Service\ContactDataExtractor
@@ -22,7 +23,7 @@ services:
     arguments: [
       '@htmx_plus_web_1_0_app.contact_repository',
       '@htmx_plus_web_1_0_app.contact_data_extractor',
-      '@htmx_plus_web_1_0_app.post_request_validator'
+      '@htmx_plus_web_1_0_app.contact_data_validator'
     ]
 
   htmx_plus_web_1_0_app.delete_contact_handler:
@@ -36,3 +37,7 @@ services:
       '@htmx_plus_web_1_0_app.post_contact_handler',
       '@htmx_plus_web_1_0_app.delete_contact_handler'
     ]
+
+  htmx_plus_web_1_0_app.email_validation_service:
+    class: 'Drupal\htmx_plus_web_1_0_app\Service\EmailValidationService'
+    arguments: ['@htmx_plus_web_1_0_app.contact_repository']

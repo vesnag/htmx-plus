@@ -4,13 +4,7 @@ htmx_plus_web_1_0_app.contacts:
     _controller: '\Drupal\htmx_plus_web_1_0_app\Controller\ContactsController::contacts'
   requirements:
     _permission: 'access content'
-
-htmx_plus_web_1_0_app.contacts_list:
-  path: '/contacts/list'
-  defaults:
-    _controller: '\Drupal\htmx_plus_web_1_0_app\Controller\ContactsController::builContactList'
-  requirements:
-    _permission: 'access content'
+  methods: [GET]
 
 htmx_plus_web_1_0_app.contacts_new:
   path: '/contacts/new'
@@ -29,6 +23,7 @@ htmx_plus_web_1_0_app.contact_show:
   requirements:
     _permission: 'access content'
     contact_id: '\d+'
+  methods: [GET]
 
 htmx_plus_web_1_0_app.contact_edit:
   path: '/contacts/{contact_id}/edit'
@@ -40,7 +35,7 @@ htmx_plus_web_1_0_app.contact_edit:
     contact_id: '\d+'
   methods: [GET, POST, DELETE]
 
-# # Temporary route for HTTP request example, to be removed in the future.
+# Temporary route for HTTP request example, to be removed in the future.
 htmx_plus_web_1_0_app.contact_delete:
   path: '/contacts/{contact_id}/delete'
   defaults:
@@ -49,3 +44,13 @@ htmx_plus_web_1_0_app.contact_delete:
     _permission: 'access content'
     contact_id: '\d+'
   methods: [POST]
+
+htmx_plus_web_1_0_app.validate_email:
+  path: '/contacts/{contact_id}/email'
+  defaults:
+    _controller: '\Drupal\htmx_plus_web_1_0_app\Controller\EmailValidationController::validateEmail'
+  requirements:
+    _permission: 'access content'
+    contact_id: '\d+'
+  methods: [GET]
+

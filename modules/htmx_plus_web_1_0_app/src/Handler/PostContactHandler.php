@@ -7,7 +7,7 @@ namespace Drupal\htmx_plus_web_1_0_app\Handler;
 use Drupal\Core\Url;
 use Drupal\htmx_plus_web_1_0_app\Repository\ContactRepository;
 use Drupal\htmx_plus_web_1_0_app\Service\ContactDataExtractor;
-use Drupal\htmx_plus_web_1_0_app\Service\PostRequestValidator;
+use Drupal\htmx_plus_web_1_0_app\Service\ContactDataValidator;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -19,7 +19,7 @@ class PostContactHandler {
   public function __construct(
     private readonly ContactRepository $contactRepository,
     private readonly ContactDataExtractor $contactDataExtractor,
-    private readonly PostRequestValidator $postRequestValidator,
+    private readonly ContactDataValidator $contactDataValidator,
   ) {}
 
   /**
@@ -37,7 +37,7 @@ class PostContactHandler {
     $contactData = $this->contactDataExtractor->getContactDataFromPostRequest($request);
     $contactData->setId($contact_id);
 
-    $validationResult = $this->postRequestValidator->validateContactData($contactData);
+    $validationResult = $this->contactDataValidator->validateContactData($contactData);
 
     if ($validationResult->hasErrors()) {
       return [
