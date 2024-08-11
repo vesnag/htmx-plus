@@ -1,11 +1,11 @@
 <div id="main-contacts">
   <button {{ hx_attributes({
-    'get': '/contacts/list',
-    'target': '#main-contacts',
-    'swap': 'outerHTML',
-    'trigger': 'click, keyup[ctrlKey && key == \'l\'] from:body',
+    get: '/contacts/list',
+    target: '#main-contacts',
+    swap: 'outerHTML',
+    trigger: 'click, keyup[ctrlKey && key == \'l\'] from:body',
     'push-url': 'true'
-    } ) }}>
+    }) }}>
     {{ button_text }}
   </button>
   <div><small>Click the button or press Ctrl+L to load contacts.</small></div>

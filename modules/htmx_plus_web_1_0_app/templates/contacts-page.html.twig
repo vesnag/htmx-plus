@@ -1,46 +1,48 @@
 <nav>
-	<ul hx-boost="true">
-		<li><a href="/contacts">Load entire page with HTMX</a></li>
-		<li><a href="/settings">Settings</a></li>
-		<li><a href="/help">Help</a></li>
-		<li><a href="/">Go to Home with HTMX</a></li>
-		<li><a href="/help/documentation.pdf" hx-boost="false">Download Docs</a>
-	</ul>
+    <ul  {{ hx_attributes({
+        'hx-boost': 'true',
+    }) }}>
+        <li><a href="/contacts">Load entire page with HTMX</a></li>
+        <li><a href="/settings">Settings</a></li>
+        <li><a href="/help">Help</a></li>
+        <li><a href="/">Go to Home with HTMX</a></li>
+        <li><a href="/help/documentation.pdf" hx-boost="false">Download Docs</a>
+    </ul>
 </nav>
 
 <h2>HTML Approach</h2>
 
 <form id="search-form" action="/contacts" method="get">
-	<label for="search">Search Term</label>
+    <label for="search">Search Term</label>
   <input id="search" type="search" name="q" value="{{ search_query }}"/>
 </form>
 
 <table>
-	<thead>
-		<tr>
-			<th>Name</th>
-			<th>Email</th>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
       <th>Phone</th>
-			<th>Actions</th>
-		</tr>
-	</thead>
-	<tbody>
-		{% for contact in contacts %}
-			<tr>
-				<td>{{ contact.name }}</td>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for contact in contacts %}
+            <tr>
+                <td>{{ contact.name }}</td>
         <td>{{ contact.email }}</td>
-				<td>{{ contact.phone }}</td>
-				<td>
-					<a href="/contacts/{{ contact.id }}/edit">Edit</a>
-					<a href="/contacts/{{ contact.id }}">View</a>
-				</td>
-			</tr>
-		{% endfor %}
-	</tbody>
+                <td>{{ contact.phone }}</td>
+                <td>
+                    <a href="/contacts/{{ contact.id }}/edit">Edit</a>
+                    <a href="/contacts/{{ contact.id }}">View</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
 </table>
 
 <p>
-	<a href="/contacts/new">Add Contact</a>
+    <a href="/contacts/new">Add Contact</a>
 </p>
 
 <hr>
@@ -48,36 +50,36 @@
 <h2>XHTML Approach</h2>
 
 <form id="xhtml-search-form" action="/contacts" method="get">
-	<label for="hx-search">Search Term</label>
-	<input id="hx-search" type="search" name="q" value="{{ search_query }}" placeholder="Search Contacts"/>
-	<button {{ hx_attributes({
-		'post': '/contacts',
-		'target': '#block-drupal-tailwind-content',
-		'include': '#hx-search',
-		'vals': '{"type":"xhtml-search-form", "state":"MT"}'
-		}) }}>Search</button>
+    <label for="hx-search">Search Term</label>
+    <input id="hx-search" type="search" name="q" value="{{ search_query }}" placeholder="Search Contacts"/>
+    <button {{ hx_attributes({
+        post: '/contacts',
+        target: '#block-drupal-tailwind-content',
+        include: '#hx-search',
+        vals: '{"type":"xhtml-search-form", "state":"MT"}'
+        }) }}>Search</button>
 </form>
 
 <table>
-	<thead>
-		<tr>
-			<th>Name</th>
-			<th>Email</th>
-			<th>Phone</th>
-			<th>Actions</th>
-		</tr>
-	</thead>
-	<tbody>
-		{% for contact in contacts %}
-			<tr>
-				<td>{{ contact.name }}</td>
-				<td>{{ contact.email }}</td>
-				<td>{{ contact.phone }}</td>
-				<td>
-					<a href="/contacts/{{ contact.id }}/edit">Edit</a>
-					<a href="/contacts/{{ contact.id }}">View</a>
-				</td>
-			</tr>
-		{% endfor %}
-	</tbody>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for contact in contacts %}
+            <tr>
+                <td>{{ contact.name }}</td>
+                <td>{{ contact.email }}</td>
+                <td>{{ contact.phone }}</td>
+                <td>
+                    <a href="/contacts/{{ contact.id }}/edit">Edit</a>
+                    <a href="/contacts/{{ contact.id }}">View</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
 </table>
