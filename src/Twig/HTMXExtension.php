@@ -42,7 +42,7 @@ class HTMXExtension extends AbstractExtension {
 
     foreach ($attributes as $key => $value) {
       if (!empty($value)) {
-        $html_attributes .= sprintf(' hx-%s="%s"', htmlspecialchars($key), htmlspecialchars($value));
+        $html_attributes .= sprintf(' hx-%s="%s"', htmlspecialchars((string) $key), htmlspecialchars($value));
       }
     }
 
