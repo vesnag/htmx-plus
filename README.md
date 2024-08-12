@@ -24,8 +24,11 @@ You can enable debug mode with `drush htmx:debug on` and disable it with
 `drush htmx:debug off`.
 
 - **HTMX Plus Web 1.0 App:**
-The `htmx_plus_web_1_0_app` submodule provides the HTMX Plus Web 1.0 Application
-from the book ["Hypermedia Systems"](https://hypermedia.systems/).
+The `htmx_plus_web_1_0_app` submodule offers the HTMX Plus Web 1.0 Application
+from the book ["Hypermedia Systems"](https://hypermedia.systems/). Currently,
+the entire module is implemented in a non-Drupal manner. The plan is to
+replicate the same functionality using Drupal conventions: utilizing the
+Contact entity, building forms with form classes, implementing paging, and more.
 
 ## Code Standards and Static Analysis
 - **PHPStan:**
