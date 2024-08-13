@@ -1,4 +1,8 @@
 services:
+  htmx_plus_web_1_0_app.contact_service:
+    class: Drupal\htmx_plus_web_1_0_app\Service\ContactService
+    arguments: ['@htmx_plus_web_1_0_app.contact_repository']
+
   htmx_plus_web_1_0_app.contact_repository:
     class: Drupal\htmx_plus_web_1_0_app\Repository\ContactRepository
     arguments: ['@database']

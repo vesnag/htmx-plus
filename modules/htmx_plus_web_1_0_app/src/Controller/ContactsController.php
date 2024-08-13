@@ -8,9 +8,9 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
 use Drupal\htmx_plus\Service\RequestParameterService;
 use Drupal\htmx_plus_web_1_0_app\Handler\ContactEditRequestHandler;
-use Drupal\htmx_plus_web_1_0_app\Repository\ContactRepository;
 use Drupal\htmx_plus_web_1_0_app\Service\ContactDataExtractor;
 use Drupal\htmx_plus_web_1_0_app\Service\ContactDataValidator;
+use Drupal\htmx_plus_web_1_0_app\Service\ContactService;
 use Drupal\htmx_plus_web_1_0_app\Service\ContactsRenderer;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -30,8 +30,8 @@ class ContactsController extends ControllerBase {
   /**
    * Constructs a ContactsController object.
    *
-   * @param \Drupal\htmx_plus_web_1_0_app\Repository\ContactRepository $contactRepository
-   *   The contact repository.
+   * @param \Drupal\htmx_plus_web_1_0_app\Service\ContactService $contactService
+   *   The contact service.
    * @param \Drupal\htmx_plus_web_1_0_app\Service\ContactDataExtractor $contactDataExtractor
    *   The contact data extractor.
    * @param \Drupal\htmx_plus_web_1_0_app\Service\ContactDataValidator $contactDataValidator
@@ -44,7 +44,7 @@ class ContactsController extends ControllerBase {
    *   The contact edit request handler.
    */
   public function __construct(
-    private ContactRepository $contactRepository,
+    private ContactService $contactService,
     private ContactDataExtractor $contactDataExtractor,
     private ContactDataValidator $contactDataValidator,
     private ContactsRenderer $contactsRenderer,
@@ -58,7 +58,7 @@ class ContactsController extends ControllerBase {
    */
   public static function create(ContainerInterface $container): self {
     return new static(
-      $container->get('htmx_plus_web_1_0_app.contact_repository'),
+      $container->get('htmx_plus_web_1_0_app.contact_service'),
       $container->get('htmx_plus_web_1_0_app.contact_data_extractor'),
       $container->get('htmx_plus_web_1_0_app.contact_data_validator'),
       $container->get('htmx_plus_web_1_0_app.contacts_renderer'),
@@ -106,7 +106,7 @@ class ContactsController extends ControllerBase {
     $validationResult = $this->contactDataValidator->validateContactData($contactData);
 
     if (!$validationResult->hasErrors()) {
-      $this->contactRepository->saveContact($contactData);
+      $this->contactService->saveContact($contactData);
 
       $url = Url::fromRoute('htmx_plus_web_1_0_app.contacts')->toString();
       return new RedirectResponse($url);
@@ -132,7 +132,7 @@ class ContactsController extends ControllerBase {
    */
   #[Route('/contacts/{contact_id}', name: 'contact_show')]
   public function show(string $contact_id): array {
-    $contact = $this->contactRepository->getContactById($contact_id);
+    $contact = $this->contactService->getContactById($contact_id);
 
     if (NULL === $contact) {
       throw new NotFoundHttpException();
@@ -189,12 +189,12 @@ class ContactsController extends ControllerBase {
       throw new MethodNotAllowedHttpException(['POST'], 'Method Not Allowed');
     }
 
-    $contact = $this->contactRepository->getContactById($contact_id);
+    $contact = $this->contactService->getContactById($contact_id);
     if (NULL === $contact) {
       throw new NotFoundHttpException();
     }
 
-    $this->contactRepository->deleteContact($contact_id);
+    $this->contactService->deleteContact($contact_id);
 
     $url = Url::fromRoute('htmx_plus_web_1_0_app.contacts')->toString();
     return new RedirectResponse($url);
@@ -211,7 +211,7 @@ class ContactsController extends ControllerBase {
    */
   #[Route('/contacts/list', name: 'contacts_list')]
   public function builContactList(Request $request): Response|array {
-    $contacts = $this->contactRepository->all();
+    $contacts = $this->contactService->getAllContacts();
 
     return $this->contactsRenderer->renderContactsList($request, $contacts);
   }
@@ -226,10 +226,10 @@ class ContactsController extends ControllerBase {
     $search = $this->requestParameterService->getRequestParameter($request, 'q');
 
     if ('' !== $search) {
-      return $this->contactRepository->search($search);
+      return $this->contactService->search($search);
     }
 
-    return $this->contactRepository->all();
+    return $this->contactService->getAllContacts();
 
   }
 
