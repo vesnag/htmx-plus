@@ -60,14 +60,25 @@ class ContactRepository {
   }
 
   /**
-   * Retrieves all contacts.
+   * Retrieves contacts with optional pagination.
+   *
+   * @param int|null $limit
+   *   The number of contacts to retrieve. If null, retrieves all contacts.
+   * @param int|null $offset
+   *   The offset for the contacts to retrieve.
+   *   If null, retrieves from the beginning.
    *
    * @return array<int, array<string, mixed>>
-   *   An array of all contacts, where each contact is an associative array.
+   *   An array of contacts, where each contact is an associative array.
    */
-  public function all(): array {
+  public function getContacts(?int $limit = NULL, ?int $offset = NULL): array {
     $query = $this->database->select('contacts', 'c')
       ->fields('c');
+
+    if ($limit !== NULL && $offset !== NULL) {
+      $query->range($offset, $limit);
+    }
+
     /** @var \Drupal\Core\Database\StatementInterface|array[] $statement */
     $statement = $query->execute();
     $result = $statement->fetchAll();

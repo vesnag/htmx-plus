@@ -211,7 +211,7 @@ class ContactsController extends ControllerBase {
    */
   #[Route('/contacts/list', name: 'contacts_list')]
   public function builContactList(Request $request): Response|array {
-    $contacts = $this->contactService->getAllContacts();
+    $contacts = $this->contactService->getContacts();
 
     return $this->contactsRenderer->renderContactsList($request, $contacts);
   }
@@ -229,7 +229,7 @@ class ContactsController extends ControllerBase {
       return $this->contactService->search($search);
     }
 
-    return $this->contactService->getAllContacts();
+    return $this->contactService->getContacts();
 
   }
 

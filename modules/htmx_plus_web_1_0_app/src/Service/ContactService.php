@@ -46,13 +46,13 @@ class ContactService {
   }
 
   /**
-   * Retrieves all contacts.
+   * Retrieves contacts.
    *
    * @return array<int, array<string, mixed>>
    *   An array of all contacts, where each contact is an associative array.
    */
-  public function getAllContacts(): array {
-    return $this->contactRepository->all();
+  public function getContacts(): array {
+    return $this->contactRepository->getContacts();
   }
 
   /**
