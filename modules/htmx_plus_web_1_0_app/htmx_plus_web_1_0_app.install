@@ -41,12 +41,6 @@ function htmx_plus_web_1_0_app_schema() {
         'length' => 20,
         'not null' => FALSE,
       ],
-      'created' => [
-        'description' => 'Timestamp when the contact was created.',
-        'type' => 'int',
-        'not null' => TRUE,
-        'default' => 0,
-      ],
     ],
     'primary key' => ['id'],
   ];
