@@ -28,8 +28,8 @@ class ContactRepository {
    * @param string $search
    *   The search query.
    *
-   * @return array<int, array<string, mixed>>
-   *   An array of contacts, where each contact is an associative array.
+   * @return \Drupal\htmx_plus_web_1_0_app\Model\Contact[]
+   *   An array of contacts.
    */
   public function search(string $search): array {
     $query = $this->database->select('contacts', 'c')
@@ -38,9 +38,15 @@ class ContactRepository {
 
     /** @var \Drupal\Core\Database\StatementInterface|array[] $statement */
     $statement = $query->execute();
-    $result = $statement->fetchAll();
+    $results = $statement->fetchAll();
 
-    return $result;
+    $contactObjects = [];
+    foreach ($results as $record) {
+      $contactObject = (object) $record;
+      $contactObjects[] = $this->mapToContact($contactObject);
+    }
+
+    return $contactObjects;
   }
 
   /**
@@ -108,12 +114,7 @@ class ContactRepository {
       return NULL;
     }
 
-    return is_array($contact) ? new Contact(
-      $contact['name'],
-      $contact['email'],
-      $contact['phone'],
-      (string) $contact['id']
-      ) : NULL;
+    return $this->mapToContact((object) $contact);
   }
 
   /**
@@ -157,6 +158,24 @@ class ContactRepository {
     $statement = $query->execute();
 
     return (bool) $statement->fetchField();
+  }
+
+  /**
+   * Maps a database record to a Contact object.
+   *
+   * @param object $record
+   *   The database record.
+   *
+   * @return \Drupal\htmx_plus_web_1_0_app\Model\Contact
+   *   The mapped Contact object.
+   */
+  private function mapToContact(object $record): Contact {
+    return new Contact(
+        name: $record->name ?? '',
+        email: $record->email ?? '',
+        phone: $record->phone ?? '',
+        id: $record->id ?? NULL
+    );
   }
 
 }
