@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use Drupal\htmx_plus_web_1_0_app\Service\ContactService;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\user\Entity\User;
 
@@ -35,6 +36,13 @@ class ContactsControllerTest extends BrowserTestBase {
   private const BASE_CONTACTS_URL = '/contacts';
 
   /**
+   * The contact service mock.
+   *
+   * @var \Drupal\htmx_plus_web_1_0_app\Service\ContactService|\PHPUnit\Framework\MockObject\MockObject
+   */
+  private $contactService;
+
+  /**
    * {@inheritdoc}
    */
   protected function setUp(): void {
@@ -48,6 +56,10 @@ class ContactsControllerTest extends BrowserTestBase {
       $this->privilegedUser = $user;
       $this->drupalLogin($user);
     }
+
+    // Mock the ContactService.
+    $this->contactService = $this->createMock(ContactService::class);
+    $this->container->set('htmx_plus_web_1_0_app.contact_service', $this->contactService);
   }
 
   /**
@@ -66,6 +78,14 @@ class ContactsControllerTest extends BrowserTestBase {
    * Tests the /contacts/new route with a POST request.
    */
   public function testNewContactPostRequestSuccess(): void {
+    /* $this->contactService->expects($this->once())
+    ->method('saveContact')
+    ->with([
+    'name' => 'John Doe',
+    'email' => 'john@example.com',
+    'phone' => '1234567890',
+    ]); */
+
     $this->drupalGet(sprintf('%s/new', self::BASE_CONTACTS_URL));
     $this->submitForm([
       'name' => 'John Doe',
@@ -73,7 +93,6 @@ class ContactsControllerTest extends BrowserTestBase {
       'phone' => '1234567890',
     ], 'Save');
 
-    // @todo test also redirect. $this->getSession()->getDriver()->getClient()->followRedirects(TRUE)
     $this->assertSession()->statusCodeEquals(200);
     $this->assertSession()->addressEquals('/contacts');
   }
@@ -123,7 +142,6 @@ class ContactsControllerTest extends BrowserTestBase {
       'phone' => '0987654321',
     ], 'Save');
 
-    // @todo test also redirect. $this->getSession()->getDriver()->getClient()->followRedirects(TRUE)
     $this->assertSession()->statusCodeEquals(200);
     $this->assertSession()->addressEquals(sprintf('/contacts/%d', $contact_id));
   }
