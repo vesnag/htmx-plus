@@ -8,7 +8,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Database\StatementInterface;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
-use Drupal\htmx_plus_web_1_0_app\Model\ContactData;
+use Drupal\htmx_plus_web_1_0_app\Model\Contact;
 use Drupal\htmx_plus_web_1_0_app\Repository\ContactRepository;
 use Drupal\htmx_plus_web_1_0_app\Test\Mocks\DatabaseQueryMock;
 use PHPUnit\Framework\TestCase;
@@ -93,7 +93,7 @@ class ContactRepositoryTest extends TestCase {
    * @covers ::saveContact
    */
   public function testSaveContact(): void {
-    $contactData = new ContactData(name: 'John Doe', email: 'john.doe@example.com', phone: '1234567890');
+    $contact = new Contact(name: 'John Doe', email: 'john.doe@example.com', phone: '1234567890');
 
     $insertQuery = $this->getMockBuilder(DatabaseQueryMock::class)
       ->onlyMethods(['fields', 'execute'])
@@ -107,16 +107,16 @@ class ContactRepositoryTest extends TestCase {
     $insertQuery->expects($this->once())
       ->method('fields')
       ->with([
-        'name' => $contactData->getName(),
-        'email' => $contactData->getEmail(),
-        'phone' => $contactData->getPhone(),
+        'name' => $contact->getName(),
+        'email' => $contact->getEmail(),
+        'phone' => $contact->getPhone(),
       ])
       ->willReturnSelf();
 
     $insertQuery->expects($this->once())
       ->method('execute');
 
-    $this->contactRepository->saveContact($contactData);
+    $this->contactRepository->saveContact($contact);
 
     $this->assertTrue(TRUE);
   }
@@ -147,7 +147,7 @@ class ContactRepositoryTest extends TestCase {
       ->method('fetchAll')
       ->willReturn($result);
 
-    $contacts = $this->contactRepository->all();
+    $contacts = $this->contactRepository->getContacts();
 
     $this->assertEquals($result, $contacts);
   }
@@ -186,7 +186,7 @@ class ContactRepositoryTest extends TestCase {
 
     $contact = $this->contactRepository->getContactById($contact_id);
 
-    $expectedContact = new ContactData(
+    $expectedContact = new Contact(
       $result['name'],
       $result['email'],
       $result['phone'],
@@ -201,7 +201,7 @@ class ContactRepositoryTest extends TestCase {
    * @covers ::updateContact
    */
   public function testUpdateContact(): void {
-    $contactData = new ContactData(name: 'John Doe', email: 'john.doe@example.com', phone: '1234567890', id: '1');
+    $contact = new Contact(name: 'John Doe', email: 'john.doe@example.com', phone: '1234567890', id: '1');
 
     $updateQuery = $this->getMockBuilder(DatabaseQueryMock::class)
       ->onlyMethods(['fields', 'condition', 'execute'])
@@ -215,21 +215,21 @@ class ContactRepositoryTest extends TestCase {
     $updateQuery->expects($this->once())
       ->method('fields')
       ->with([
-        'name' => $contactData->getName(),
-        'email' => $contactData->getEmail(),
-        'phone' => $contactData->getPhone(),
+        'name' => $contact->getName(),
+        'email' => $contact->getEmail(),
+        'phone' => $contact->getPhone(),
       ])
       ->willReturnSelf();
 
     $updateQuery->expects($this->once())
       ->method('condition')
-      ->with('id', $contactData->id())
+      ->with('id', $contact->id())
       ->willReturnSelf();
 
     $updateQuery->expects($this->once())
       ->method('execute');
 
-    $this->contactRepository->updateContact($contactData);
+    $this->contactRepository->updateContact($contact);
   }
 
   /**

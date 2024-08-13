@@ -8,10 +8,10 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
 use Drupal\htmx_plus\Service\RequestParameterService;
 use Drupal\htmx_plus_web_1_0_app\Handler\ContactEditRequestHandler;
-use Drupal\htmx_plus_web_1_0_app\Service\ContactDataExtractor;
-use Drupal\htmx_plus_web_1_0_app\Service\ContactDataValidator;
+use Drupal\htmx_plus_web_1_0_app\Service\ContactExtractor;
 use Drupal\htmx_plus_web_1_0_app\Service\ContactService;
 use Drupal\htmx_plus_web_1_0_app\Service\ContactsRenderer;
+use Drupal\htmx_plus_web_1_0_app\Service\ContactValidator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,9 +32,9 @@ class ContactsController extends ControllerBase {
    *
    * @param \Drupal\htmx_plus_web_1_0_app\Service\ContactService $contactService
    *   The contact service.
-   * @param \Drupal\htmx_plus_web_1_0_app\Service\ContactDataExtractor $contactDataExtractor
+   * @param \Drupal\htmx_plus_web_1_0_app\Service\ContactExtractor $contactExtractor
    *   The contact data extractor.
-   * @param \Drupal\htmx_plus_web_1_0_app\Service\ContactDataValidator $contactDataValidator
+   * @param \Drupal\htmx_plus_web_1_0_app\Service\ContactValidator $contactValidator
    *   The contact data validator.
    * @param \Drupal\htmx_plus_web_1_0_app\Service\ContactsRenderer $contactsRenderer
    *   The contacts renderer.
@@ -45,8 +45,8 @@ class ContactsController extends ControllerBase {
    */
   public function __construct(
     private ContactService $contactService,
-    private ContactDataExtractor $contactDataExtractor,
-    private ContactDataValidator $contactDataValidator,
+    private ContactExtractor $contactExtractor,
+    private ContactValidator $contactValidator,
     private ContactsRenderer $contactsRenderer,
     private RequestParameterService $requestParameterService,
     private ContactEditRequestHandler $contactEditRequestHandler,
@@ -59,8 +59,8 @@ class ContactsController extends ControllerBase {
   public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('htmx_plus_web_1_0_app.contact_service'),
-      $container->get('htmx_plus_web_1_0_app.contact_data_extractor'),
-      $container->get('htmx_plus_web_1_0_app.contact_data_validator'),
+      $container->get('htmx_plus_web_1_0_app.contact_extractor'),
+      $container->get('htmx_plus_web_1_0_app.contact_validator'),
       $container->get('htmx_plus_web_1_0_app.contacts_renderer'),
       $container->get('htmx_plus.request_parameters_service'),
       $container->get('htmx_plus_web_1_0_app.contact_edit_request_handler'),
@@ -102,11 +102,11 @@ class ContactsController extends ControllerBase {
       ];
     }
 
-    $contactData = $this->contactDataExtractor->getContactDataFromPostRequest($request);
-    $validationResult = $this->contactDataValidator->validateContactData($contactData);
+    $contact = $this->contactExtractor->getContactFromPostRequest($request);
+    $validationResult = $this->contactValidator->validateContact($contact);
 
     if (!$validationResult->hasErrors()) {
-      $this->contactService->saveContact($contactData);
+      $this->contactService->saveContact($contact);
 
       $url = Url::fromRoute('htmx_plus_web_1_0_app.contacts')->toString();
       return new RedirectResponse($url);
@@ -114,7 +114,7 @@ class ContactsController extends ControllerBase {
 
     return [
       '#theme' => 'contacts_new',
-      '#contact' => $contactData,
+      '#contact' => $contact,
       '#validationResult' => $validationResult,
     ];
   }

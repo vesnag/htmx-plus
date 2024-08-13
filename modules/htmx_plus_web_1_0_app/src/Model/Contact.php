@@ -7,7 +7,7 @@ namespace Drupal\htmx_plus_web_1_0_app\Model;
 /**
  * Represents contact data.
  */
-final class ContactData {
+final class Contact {
 
   /**
    * The ID.

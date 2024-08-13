@@ -6,8 +6,8 @@ namespace Drupal\htmx_plus_web_1_0_app\Handler;
 
 use Drupal\Core\Url;
 use Drupal\htmx_plus_web_1_0_app\Repository\ContactRepository;
-use Drupal\htmx_plus_web_1_0_app\Service\ContactDataExtractor;
-use Drupal\htmx_plus_web_1_0_app\Service\ContactDataValidator;
+use Drupal\htmx_plus_web_1_0_app\Service\ContactExtractor;
+use Drupal\htmx_plus_web_1_0_app\Service\ContactValidator;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -18,8 +18,8 @@ class PostContactHandler {
 
   public function __construct(
     private readonly ContactRepository $contactRepository,
-    private readonly ContactDataExtractor $contactDataExtractor,
-    private readonly ContactDataValidator $contactDataValidator,
+    private readonly ContactExtractor $contactExtractor,
+    private readonly ContactValidator $contactValidator,
   ) {}
 
   /**
@@ -34,20 +34,20 @@ class PostContactHandler {
    *   A render array or a redirect response.
    */
   public function handle(string $contact_id, Request $request): array|RedirectResponse {
-    $contactData = $this->contactDataExtractor->getContactDataFromPostRequest($request);
-    $contactData->setId($contact_id);
+    $contact = $this->contactExtractor->getContactFromPostRequest($request);
+    $contact->setId($contact_id);
 
-    $validationResult = $this->contactDataValidator->validateContactData($contactData);
+    $validationResult = $this->contactValidator->validateContact($contact);
 
     if ($validationResult->hasErrors()) {
       return [
         '#theme' => 'contact_edit',
-        '#contact' => $contactData,
+        '#contact' => $contact,
         '#validationResult' => $validationResult,
       ];
     }
 
-    $this->contactRepository->updateContact($contactData);
+    $this->contactRepository->updateContact($contact);
 
     $url = Url::fromRoute('htmx_plus_web_1_0_app.contact_show', [
       'contact_id' => $contact_id,

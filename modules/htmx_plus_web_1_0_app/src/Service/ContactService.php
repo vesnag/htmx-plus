@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\htmx_plus_web_1_0_app\Service;
 
-use Drupal\htmx_plus_web_1_0_app\Model\ContactData;
+use Drupal\htmx_plus_web_1_0_app\Model\Contact;
 use Drupal\htmx_plus_web_1_0_app\Repository\ContactRepository;
 
 /**
@@ -38,11 +38,11 @@ class ContactService {
   /**
    * Saves a contact.
    *
-   * @param \Drupal\htmx_plus_web_1_0_app\Model\ContactData $contactData
+   * @param \Drupal\htmx_plus_web_1_0_app\Model\Contact $contact
    *   The contact data.
    */
-  public function saveContact(ContactData $contactData): void {
-    $this->contactRepository->saveContact($contactData);
+  public function saveContact(Contact $contact): void {
+    $this->contactRepository->saveContact($contact);
   }
 
   /**
@@ -61,21 +61,21 @@ class ContactService {
    * @param string $contactId
    *   The contact ID.
    *
-   * @return \Drupal\htmx_plus_web_1_0_app\Model\ContactData|null
+   * @return \Drupal\htmx_plus_web_1_0_app\Model\Contact|null
    *   The contact data, or NULL if the contact does not exist.
    */
-  public function getContactById(string $contactId): ?ContactData {
+  public function getContactById(string $contactId): ?Contact {
     return $this->contactRepository->getContactById($contactId);
   }
 
   /**
    * Updates a contact.
    *
-   * @param \Drupal\htmx_plus_web_1_0_app\Model\ContactData $contactData
+   * @param \Drupal\htmx_plus_web_1_0_app\Model\Contact $contact
    *   The contact data.
    */
-  public function updateContact(ContactData $contactData): void {
-    $this->contactRepository->updateContact($contactData);
+  public function updateContact(Contact $contact): void {
+    $this->contactRepository->updateContact($contact);
   }
 
   /**

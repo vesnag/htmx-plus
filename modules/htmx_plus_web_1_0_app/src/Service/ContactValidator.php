@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Drupal\htmx_plus_web_1_0_app\Service;
 
-use Drupal\htmx_plus_web_1_0_app\Model\ContactData;
+use Drupal\htmx_plus_web_1_0_app\Model\Contact;
 use Drupal\htmx_plus_web_1_0_app\Model\ValidationResult;
 
 /**
  * Validates contact data.
  */
-class ContactDataValidator {
+class ContactValidator {
 
   public function __construct(
     private EmailValidationService $emailValidationService,
@@ -19,22 +19,22 @@ class ContactDataValidator {
   /**
    * Extract and validate contact data from the request.
    *
-   * @param \Drupal\htmx_plus_web_1_0_app\Model\ContactData $contact_data
+   * @param \Drupal\htmx_plus_web_1_0_app\Model\Contact $contact
    *   The contact data.
    *
    * @return \Drupal\htmx_plus_web_1_0_app\Model\ValidationResult
    *   The validation result.
    */
-  public function validateContactData(ContactData $contact_data): ValidationResult {
+  public function validateContact(Contact $contact): ValidationResult {
     $validationResult = new ValidationResult();
 
-    if (empty($contact_data->getName())) {
+    if (empty($contact->getName())) {
       $validationResult->addError('name', 'Name is required.');
     }
 
-    $this->validateEmail($contact_data->getEmail(), $validationResult);
+    $this->validateEmail($contact->getEmail(), $validationResult);
 
-    if (empty($contact_data->getPhone())) {
+    if (empty($contact->getPhone())) {
       $validationResult->addError('phone', 'Phone is required.');
     }
 

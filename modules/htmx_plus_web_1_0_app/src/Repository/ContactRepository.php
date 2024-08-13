@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Drupal\htmx_plus_web_1_0_app\Repository;
 
 use Drupal\Core\Database\Connection;
-use Drupal\htmx_plus_web_1_0_app\Model\ContactData;
+use Drupal\htmx_plus_web_1_0_app\Model\Contact;
 
 /**
  * Repository for handling contacts.
@@ -46,15 +46,15 @@ class ContactRepository {
   /**
    * Saves a contact.
    *
-   * @param \Drupal\htmx_plus_web_1_0_app\Model\ContactData $contact_data
+   * @param \Drupal\htmx_plus_web_1_0_app\Model\Contact $contact
    *   The contact data.
    */
-  public function saveContact(ContactData $contact_data): void {
+  public function saveContact(Contact $contact): void {
     $this->database->insert('contacts')
       ->fields([
-        'name' => $contact_data->getName(),
-        'email' => $contact_data->getEmail(),
-        'phone' => $contact_data->getPhone(),
+        'name' => $contact->getName(),
+        'email' => $contact->getEmail(),
+        'phone' => $contact->getPhone(),
       ])
       ->execute();
   }
@@ -92,10 +92,10 @@ class ContactRepository {
    * @param string $contact_id
    *   The contact ID.
    *
-   * @return \Drupal\htmx_plus_web_1_0_app\Model\ContactData|null
+   * @return \Drupal\htmx_plus_web_1_0_app\Model\Contact|null
    *   The contact data, or NULL if the contact does not exist.
    */
-  public function getContactById(string $contact_id): ?ContactData {
+  public function getContactById(string $contact_id): ?Contact {
     $query = $this->database->select('contacts', 'c')
       ->fields('c', ['id', 'name', 'email', 'phone'])
       ->condition('id', $this->database->escapeLike($contact_id));
@@ -108,7 +108,7 @@ class ContactRepository {
       return NULL;
     }
 
-    return is_array($contact) ? new ContactData(
+    return is_array($contact) ? new Contact(
       $contact['name'],
       $contact['email'],
       $contact['phone'],
@@ -119,17 +119,17 @@ class ContactRepository {
   /**
    * Updates a contact.
    *
-   * @param \Drupal\htmx_plus_web_1_0_app\Model\ContactData $contactData
+   * @param \Drupal\htmx_plus_web_1_0_app\Model\Contact $contact
    *   The contact data.
    */
-  public function updateContact(ContactData $contactData): void {
+  public function updateContact(Contact $contact): void {
     $this->database->update('contacts')
       ->fields([
-        'name' => $contactData->getName(),
-        'email' => $contactData->getEmail(),
-        'phone' => $contactData->getPhone(),
+        'name' => $contact->getName(),
+        'email' => $contact->getEmail(),
+        'phone' => $contact->getPhone(),
       ])
-      ->condition('id', $contactData->id())
+      ->condition('id', $contact->id())
       ->execute();
   }
 
