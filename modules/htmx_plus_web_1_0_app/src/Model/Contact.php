@@ -17,7 +17,7 @@ final class Contact {
   /**
    * The name.
    */
-  private readonly string $name;
+  private string $name;
 
   /**
    * The email.
@@ -50,6 +50,9 @@ final class Contact {
 
   /**
    * Set the contact ID.
+   *
+   * @param string $id
+   *   The contact ID.
    */
   public function setId(?string $id): void {
     $this->id = $id;
@@ -60,6 +63,16 @@ final class Contact {
    */
   public function getName(): string {
     return $this->name;
+  }
+
+  /**
+   * Set the name.
+   *
+   * @param string $name
+   *   The name.
+   */
+  public function setName(string $name): void {
+    $this->name = $name;
   }
 
   /**

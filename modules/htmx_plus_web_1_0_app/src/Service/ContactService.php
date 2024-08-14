@@ -48,8 +48,8 @@ class ContactService {
   /**
    * Retrieves contacts.
    *
-   * @return array<int, array<string, mixed>>
-   *   An array of all contacts, where each contact is an associative array.
+   * @return \Drupal\htmx_plus_web_1_0_app\Model\Contact[]
+   *   An array of contacts.
    */
   public function getContacts(): array {
     return $this->contactRepository->getContacts();

@@ -46,7 +46,7 @@ final class ContactsRenderer {
    *
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   The request object.
-   * @param array<int,array<string, mixed>> $contacts
+   * @param \Drupal\htmx_plus_web_1_0_app\Model\Contact[] $contacts
    *   The contacts to render.
    *
    * @return \Symfony\Component\HttpFoundation\Response|array<string,mixed>

@@ -74,8 +74,8 @@ class ContactRepository {
    *   The offset for the contacts to retrieve.
    *   If null, retrieves from the beginning.
    *
-   * @return array<int, array<string, mixed>>
-   *   An array of contacts, where each contact is an associative array.
+   * @return \Drupal\htmx_plus_web_1_0_app\Model\Contact[]
+   *   An array of contacts.
    */
   public function getContacts(?int $limit = NULL, ?int $offset = NULL): array {
     $query = $this->database->select('contacts', 'c')
@@ -87,9 +87,18 @@ class ContactRepository {
 
     /** @var \Drupal\Core\Database\StatementInterface|array[] $statement */
     $statement = $query->execute();
-    $result = $statement->fetchAll();
+    $results = $statement->fetchAll();
 
-    return $result;
+    $contacts = array_map(function ($result) {
+       return new Contact(
+           $result->name,
+           $result->email,
+           $result->phone,
+           $result->id
+       );
+    }, $results);
+
+    return $contacts;
   }
 
   /**

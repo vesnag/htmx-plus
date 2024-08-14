@@ -15,6 +15,17 @@ class ContactHelper {
   public function __construct(private Connection $database) {}
 
   /**
+   * Generates and inserts contacts into the database.
+   *
+   * @param int $count
+   *   The number of contacts to generate and insert.
+   */
+  public function generateAndInsertContacts(int $count): void {
+    $contacts = $this->generateContacts($count);
+    $this->insertContactsIntoDatabase($contacts);
+  }
+
+  /**
    * Generate an array of Contact objects.
    *
    * @param int $count
