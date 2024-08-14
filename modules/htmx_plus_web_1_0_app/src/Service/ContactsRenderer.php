@@ -6,6 +6,8 @@ namespace Drupal\htmx_plus_web_1_0_app\Service;
 
 use Drupal\Core\Render\RendererInterface;
 use Drupal\htmx_plus\Service\HtmxRequestChecker;
+use Drupal\htmx_plus_web_1_0_app\Model\Contact;
+use Drupal\htmx_plus_web_1_0_app\Model\ValidationResult;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -67,6 +69,41 @@ final class ContactsRenderer {
     }
 
     return $render_array;
+  }
+
+  /**
+   * Renders the new contact form.
+   *
+   * @param \Drupal\htmx_plus_web_1_0_app\Model\Contact $contact
+   *   The contact data.
+   * @param \Drupal\htmx_plus_web_1_0_app\Model\ValidationResult $validationResult
+   *   The validation result.
+   *
+   * @return array<string,mixed>
+   *   A render array.
+   */
+  public function renderNewContactForm(?Contact $contact = NULL, ?ValidationResult $validationResult = NULL): array {
+    return [
+      '#theme' => 'contacts_new',
+      '#contact' => $contact,
+      '#validationResult' => $validationResult,
+    ];
+  }
+
+  /**
+   * Renders the contact show page.
+   *
+   * @param \Drupal\htmx_plus_web_1_0_app\Model\Contact $contact
+   *   The contact data.
+   *
+   * @return array<string,mixed>
+   *   A render array.
+   */
+  public function renderContactShow(Contact $contact): array {
+    return [
+      '#theme' => 'contact_show',
+      '#contact' => $contact,
+    ];
   }
 
 }

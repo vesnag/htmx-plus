@@ -95,28 +95,21 @@ class ContactsController extends ControllerBase {
   #[Route('/contacts/new', name: 'contacts_new')]
   public function new(Request $request): array|RedirectResponse {
     if ('POST' !== $request->getMethod()) {
-      return [
-        '#theme' => 'contacts_new',
-        '#contact' => [],
-        '#validationResult' => [],
-      ];
+      return $this->contactsRenderer->renderNewContactForm();
     }
 
-    $contact = $this->contactExtractor->getContactFromPostRequest($request);
-    $validationResult = $this->contactValidator->validateContact($contact);
+    $contactFromPost = $this->contactExtractor->getContactFromPostRequest($request);
+    $validationResult = $this->contactValidator->validateContact($contactFromPost);
 
     if (!$validationResult->hasErrors()) {
-      $this->contactService->saveContact($contact);
+      $this->contactService->saveContact($contactFromPost);
 
       $url = Url::fromRoute('htmx_plus_web_1_0_app.contacts')->toString();
       return new RedirectResponse($url);
     }
 
-    return [
-      '#theme' => 'contacts_new',
-      '#contact' => $contact,
-      '#validationResult' => $validationResult,
-    ];
+    return $this->contactsRenderer->renderNewContactForm($contactFromPost, $validationResult);
+
   }
 
   /**
@@ -138,10 +131,7 @@ class ContactsController extends ControllerBase {
       throw new NotFoundHttpException();
     }
 
-    return [
-      '#theme' => 'contact_show',
-      '#contact' => $contact,
-    ];
+    return $this->contactsRenderer->renderContactShow($contact);
   }
 
   /**
