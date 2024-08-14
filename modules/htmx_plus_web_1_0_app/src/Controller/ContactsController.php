@@ -6,7 +6,6 @@ namespace Drupal\htmx_plus_web_1_0_app\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
-use Drupal\htmx_plus\Service\RequestParameterService;
 use Drupal\htmx_plus_web_1_0_app\Handler\ContactEditRequestHandler;
 use Drupal\htmx_plus_web_1_0_app\Service\ContactExtractor;
 use Drupal\htmx_plus_web_1_0_app\Service\ContactService;
@@ -38,8 +37,6 @@ class ContactsController extends ControllerBase {
    *   The contact data validator.
    * @param \Drupal\htmx_plus_web_1_0_app\Service\ContactsRenderer $contactsRenderer
    *   The contacts renderer.
-   * @param \Drupal\htmx_plus\Service\RequestParameterService $requestParameterService
-   *   The request parameter service.
    * @param \Drupal\htmx_plus_web_1_0_app\Handler\ContactEditRequestHandler $contactEditRequestHandler
    *   The contact edit request handler.
    */
@@ -48,7 +45,6 @@ class ContactsController extends ControllerBase {
     private ContactExtractor $contactExtractor,
     private ContactValidator $contactValidator,
     private ContactsRenderer $contactsRenderer,
-    private RequestParameterService $requestParameterService,
     private ContactEditRequestHandler $contactEditRequestHandler,
   ) {
   }
@@ -62,7 +58,6 @@ class ContactsController extends ControllerBase {
       $container->get('htmx_plus_web_1_0_app.contact_extractor'),
       $container->get('htmx_plus_web_1_0_app.contact_validator'),
       $container->get('htmx_plus_web_1_0_app.contacts_renderer'),
-      $container->get('htmx_plus.request_parameters_service'),
       $container->get('htmx_plus_web_1_0_app.contact_edit_request_handler'),
     );
   }
@@ -78,7 +73,7 @@ class ContactsController extends ControllerBase {
    */
   #[Route('/contacts', name: 'contacts')]
   public function contacts(Request $request): Response|array {
-    $contacts = $this->getContacts($request);
+    $contacts = $this->contactService->getContactsBySearchQuery($request);
 
     return $this->contactsRenderer->renderContactPage($request, $contacts);
   }
@@ -204,23 +199,6 @@ class ContactsController extends ControllerBase {
     $contacts = $this->contactService->getContacts();
 
     return $this->contactsRenderer->renderContactsList($request, $contacts);
-  }
-
-  /**
-   * Gets the contacts set based on the search query.
-   *
-   * @return mixed[]
-   *   The contacts set.
-   */
-  private function getContacts(Request $request): array {
-    $search = $this->requestParameterService->getRequestParameter($request, 'q');
-
-    if ('' !== $search) {
-      return $this->contactService->search($search);
-    }
-
-    return $this->contactService->getContacts();
-
   }
 
 }

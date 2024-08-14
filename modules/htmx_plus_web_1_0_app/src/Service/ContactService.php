@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\htmx_plus_web_1_0_app\Service;
 
+use Drupal\htmx_plus\Service\RequestParameterService;
 use Drupal\htmx_plus_web_1_0_app\Model\Contact;
 use Drupal\htmx_plus_web_1_0_app\Repository\ContactRepository;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Service for handling contacts.
@@ -17,22 +19,31 @@ class ContactService {
    *
    * @param \Drupal\htmx_plus_web_1_0_app\Repository\ContactRepository $contactRepository
    *   The contact repository.
+   * @param \Drupal\htmx_plus\Service\RequestParameterService $requestParameterService
+   *   The request parameter service.
    */
   public function __construct(
     private ContactRepository $contactRepository,
+    private RequestParameterService $requestParameterService,
   ) {}
 
   /**
-   * Searches for contacts based on criteria.
+   * Gets the contacts set based on the search query.
    *
-   * @param string $search
-   *   The search query.
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   The request object.
    *
-   * @return \Drupal\htmx_plus_web_1_0_app\Model\Contact[]
-   *   An array of contacts.
+   * @return mixed[]
+   *   The contacts set.
    */
-  public function search(string $search): array {
-    return $this->contactRepository->search($search);
+  public function getContactsBySearchQuery(Request $request): array {
+    $search = $this->requestParameterService->getRequestParameter($request, 'q');
+
+    if ('' !== $search) {
+      return $this->search($search);
+    }
+
+    return $this->getContacts();
   }
 
   /**
@@ -96,6 +107,19 @@ class ContactService {
    */
   public function doesEmailExist(string $email): bool {
     return $this->contactRepository->doesEmailExist($email);
+  }
+
+  /**
+   * Searches for contacts based on criteria.
+   *
+   * @param string $search
+   *   The search query.
+   *
+   * @return \Drupal\htmx_plus_web_1_0_app\Model\Contact[]
+   *   An array of contacts.
+   */
+  private function search(string $search): array {
+    return $this->contactRepository->search($search);
   }
 
 }
